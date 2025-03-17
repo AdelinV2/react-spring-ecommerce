@@ -1,0 +1,48 @@
+# Node.js
+/node_modules/
+/build/
+/dist/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependency directories
+node_modules/
+
+# Production
+/build
+
+# Misc
+.DS_Store
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IntelliJ IDEA
+/.idea/
+/*.iml
+/out/
+
+# Spring Boot
+/target/
+/*.jar
+/*.war
+/*.ear
+
+# Maven
+/.mvn/
+!/.mvn/wrapper/maven-wrapper.jar
+**/target/
+
+# VS Code
+.vscode/
+
+# Windows
+Thumbs.db
+ehthumbs.db
