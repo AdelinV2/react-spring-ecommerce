@@ -30,7 +30,6 @@ build/
 .idea/
 *.ipr
 *.iws
-*.xml
 *.iml
 out/
 
