@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: product-service
+
+  datasource:
+    url: ${PRODUCT_DB_URL}
+    username: ${PRODUCT_DB_USERNAME}
+    password: ${PRODUCT_DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
