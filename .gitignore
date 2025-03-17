@@ -6,6 +6,8 @@
 # Logs
 logs
 *.log
+*.tmp
+*.bak
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
@@ -14,29 +16,32 @@ yarn-error.log*
 node_modules/
 
 # Production
-/build
+build/
 
 # Misc
 .DS_Store
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+*.env
+*.local
+*.env.development.local
+*.env.test.local
+*.env.production.local
 
 # IntelliJ IDEA
-/.idea/
-/*.iml
-/out/
+.idea/
+*.ipr
+*.iws
+*.xml
+*.iml
+out/
 
 # Spring Boot
-/target/
-/*.jar
-/*.war
-/*.ear
+target/
+*.jar
+*.war
+*.ear
 
 # Maven
-/.mvn/
+.mvn/
 !/.mvn/wrapper/maven-wrapper.jar
 **/target/
 
@@ -46,3 +51,11 @@ node_modules/
 # Windows
 Thumbs.db
 ehthumbs.db
+
+
+
+
+
+
+
+
