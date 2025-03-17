@@ -3,6 +3,7 @@ export default function SearchBar() {
     <div className="SearchBar">
       <input className="search-input" type="text" placeholder="Search..." />
       <button className="search-btn">Search</button>
+      
     </div>
   );
 }

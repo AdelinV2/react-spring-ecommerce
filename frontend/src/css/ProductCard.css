@@ -1,0 +1,85 @@
+.icon
+{
+    height: auto;
+    width: 2em;
+}
+
+.heart-hollow
+{
+    fill: var(--outline-gray) ;
+}
+
+.heart-full,.heart-hollow
+{
+    
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
+.heart-hollow:hover
+{
+    fill: var(--grad-color-1) ;
+}
+
+.heart-full
+{
+    fill: var(--grad-color-1);
+}
+
+.star{
+    fill: var(--grad-color-3);
+}
+
+.ProductCard
+{
+    position: relative;
+    margin: 50px;
+    border-radius: 20px;
+    box-shadow: 3px 3px 3px var(--grad-color-3),-3px -3px 3px var(--grad-color-1);
+    height: 300px;
+    width: 250px;
+
+}
+
+.rating-cont
+{
+    margin-left: 5px;
+    display: flex;
+    align-items: center ;
+    gap: 5px;
+}
+
+.rating-value,.comments
+{
+    color: var(--color);
+    font-weight: 500;
+    font-size: large;
+    text-align: center;
+
+}
+
+.comments
+{
+    margin-left:4px;
+    font-weight: 400;
+    font-size: 0.9rem;
+}
+
+.product-img
+{
+    height: 50%;
+    width: 100%;
+    border-radius: 20px 20px 0 0;
+   
+}
+.product-name
+{
+    padding-left: 5px;
+    margin-top: 10px;
+    text-align: center;
+    color: var(--color);
+    border-bottom:solid 2px var(--color);
+    font-size: 1.2rem;
+    font-weight: 600;
+}
