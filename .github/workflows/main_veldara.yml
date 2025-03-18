@@ -80,7 +80,7 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'veldara'
-          package: 'backend/api-gateway/target/api-gateway.jar-0.0.1-SNAPSHOT.jar'
+          package: 'backend/api-gateway/target/api-gateway-0.0.1-SNAPSHOT.jar'
           slot-name: 'production'
 
       # Deploy product-service
@@ -88,5 +88,5 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'veldara-product-service'
-          package: 'backend/product-service/target/product-service.jar-0.0.1-SNAPSHOT.jar'
+          package: 'backend/backend/product-service/target/product-service-0.0.1-SNAPSHOT.jar'
           slot-name: 'production'
