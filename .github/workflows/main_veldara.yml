@@ -26,16 +26,16 @@ jobs:
           cd backend/api-gateway
           mvn clean install
 
-      # Build for product-service
-      - name: Build product-service
-        run: |
-          cd backend/product-service
-          mvn clean install
-
       # Build for service-registry
       - name: Build service-registry
         run: |
           cd backend/service-registry
+          mvn clean install
+
+      # Build for product-service
+      - name: Build product-service
+        run: |
+          cd backend/product-service
           mvn clean install
 
       - name: Upload artifacts for deployment
@@ -44,8 +44,8 @@ jobs:
           name: java-apps
           path: |
             backend/api-gateway/target/api-gateway-0.0.1-SNAPSHOT.jar
-            backend/product-service/target/product-service-0.0.1-SNAPSHOT.jar
             backend/service-registry/target/service-registry-0.0.1-SNAPSHOT.jar
+            backend/product-service/target/product-service-0.0.1-SNAPSHOT.jar
 
   deploy:
     runs-on: ubuntu-latest
@@ -66,6 +66,13 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
 
+      # Deploy service-registry
+      - name: Deploy service-registry to Azure Web App
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: 'service-registry'
+          package: './backend/service-registry/target/service-registry.jar'
+
       # Deploy api-gateway
       - name: Deploy api-gateway to Azure Web App
         uses: azure/webapps-deploy@v3
@@ -79,10 +86,3 @@ jobs:
         with:
           app-name: 'product-service'
           package: './backend/product-service/target/product-service.jar'
-
-      # Deploy service-registry
-      - name: Deploy service-registry to Azure Web App
-        uses: azure/webapps-deploy@v3
-        with:
-          app-name: 'service-registry'
-          package: './backend/service-registry/target/service-registry.jar'
