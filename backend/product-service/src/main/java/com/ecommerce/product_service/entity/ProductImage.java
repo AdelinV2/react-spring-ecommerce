@@ -17,9 +17,9 @@ import org.hibernate.annotations.OnDeleteAction;
 public class ProductImage {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private String id;
+    private long id;
 
     @Column(name = "image_url")
     private String imageUrl;

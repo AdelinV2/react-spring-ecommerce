@@ -52,7 +52,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product getProductById(String id) {
+    public Product getProductById(int id) {
 
         return productRepository.findById(id).orElse(null);
     }

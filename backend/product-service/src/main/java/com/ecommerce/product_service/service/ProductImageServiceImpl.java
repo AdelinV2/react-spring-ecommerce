@@ -27,12 +27,12 @@ public class ProductImageServiceImpl implements ProductImageService {
     }
 
     @Override
-    public ProductImage getProductImageById(String id) {
+    public ProductImage getProductImageById(int id) {
         return null;
     }
 
     @Override
-    public List<ProductImage> getProductImagesByProductId(String productId) {
+    public List<ProductImage> getProductImagesByProductId(int productId) {
         return List.of();
     }
 }

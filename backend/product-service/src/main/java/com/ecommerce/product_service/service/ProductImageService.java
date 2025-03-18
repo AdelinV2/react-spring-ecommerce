@@ -33,7 +33,7 @@ public interface ProductImageService {
      * @param id the ID of the product image
      * @return the product image
      */
-    ProductImage getProductImageById(String id);
+    ProductImage getProductImageById(int id);
 
     /**
      * Get all product images of a product.
@@ -41,7 +41,7 @@ public interface ProductImageService {
      * @param productId the ID of the product
      * @return the list of product images
      */
-    List<ProductImage> getProductImagesByProductId(String productId);
+    List<ProductImage> getProductImagesByProductId(int productId);
 
 
 }

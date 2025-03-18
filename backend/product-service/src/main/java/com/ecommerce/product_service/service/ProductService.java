@@ -38,7 +38,7 @@ public interface ProductService {
      * @param id the ID of the product
      * @return the product
      */
-    Product getProductById(String id);
+    Product getProductById(int id);
 
     /**
      * Get all products of a category.
