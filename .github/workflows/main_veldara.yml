@@ -71,19 +71,19 @@ jobs:
       - name: Deploy service-registry to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'service-registry'
+          app-name: 'veldara-service-registry'
           package: './backend/service-registry/target/service-registry.jar'
 
       # Deploy api-gateway
       - name: Deploy api-gateway to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'api-gateway'
+          app-name: 'veldara'
           package: './backend/api-gateway/target/api-gateway.jar'
 
       # Deploy product-service
       - name: Deploy product-service to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'product-service'
+          app-name: 'veldara-product-service'
           package: './backend/product-service/target/product-service.jar'
