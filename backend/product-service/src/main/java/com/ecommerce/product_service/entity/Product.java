@@ -21,12 +21,15 @@ import java.util.List;
 public class Product {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     private String id;
 
     @Column(name = "name")
     private String name;
+
+    @Column(name = "category")
+    private String category;
 
     @Column(name = "description")
     private String description;
@@ -54,6 +57,6 @@ public class Product {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<ProductImage> productImages = new ArrayList<>();
+    private List<ProductImage> images = new ArrayList<>();
 
 }
