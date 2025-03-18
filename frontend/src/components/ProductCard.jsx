@@ -8,14 +8,16 @@ export default function ProductCard({
   rating,
   numComms,
   price,
-  discountedPrice,
+  oldPrice,
   favourite,
 }) {
   return (
     <div className="ProductCard">
       {oot ? <span className="oot-marker">Out of stock</span> : null}
       <img src={img} alt={name} className="product-img" />
-      <p className="product-name">{name}</p>
+      <div className="product-name-container">
+        <p className="product-name">{name}</p>
+      </div>
       {!favourite ? (
         <svg
           className="icon heart-hollow"
@@ -75,6 +77,11 @@ export default function ProductCard({
         <span className="rating-value">{rating}</span>
         <span className="comments">({numComms})</span>
       </div>
+      <div className="price-container">
+        {discount ? <p className="price-value">{oldPrice}</p> : null}
+        <p className="price-value">{price}</p>
+      </div>
+      <button className="buy-item-btn"></button>
     </div>
   );
 }
