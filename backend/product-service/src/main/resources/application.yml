@@ -14,3 +14,14 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka:password@localhost:8761/eureka
+    register-with-eureka: true
+    fetch-registry: true
+    proxy-user-name: ${EUREKA_USERNAME:eureka}
+    proxy-password: ${EUREKA_PASSWORD:password}
+  instance:
+    hostname: localhost
