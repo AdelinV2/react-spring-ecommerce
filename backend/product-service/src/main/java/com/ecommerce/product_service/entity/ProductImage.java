@@ -1,5 +1,6 @@
 package com.ecommerce.product_service.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,7 +20,7 @@ public class ProductImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private long id;
+    private int id;
 
     @Column(name = "image_url")
     private String imageUrl;
@@ -30,5 +31,6 @@ public class ProductImage {
     @ManyToOne
     @JoinColumn(name = "product_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonBackReference
     private Product product;
 }
