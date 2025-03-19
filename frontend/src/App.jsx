@@ -9,13 +9,13 @@ function App() {
       <Navbar />
       <NavFooter />
       <ProductCard
-        name="Parfum HUGO BOSSsadasda  adsdadasd dsadasdsa"
+        name="Parfum HUGO BOSS sadasda  adsdadasd dsadasdsa adasda"
         oot={false}
         img="https://petapixel.com/assets/uploads/2023/06/Boss-Infinite-1536x1023.jpg"
         favourite={false}
         rating={4.5}
         numComms={123}
-        discount={false}
+        discount={true}
         oldPrice={399.99}
         price={299.99}
       />
