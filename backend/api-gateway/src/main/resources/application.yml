@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: ${API_GATEWAY_PORT:80}
 
 spring:
   application:
@@ -8,12 +8,12 @@ spring:
     gateway:
       routes:
         - id: product-service
-          uri: lb://PRODUCT-SERVICE
+          uri: http://veldara-product-service.azurewebsites.net
           predicates:
             - Path=/api/product/**
 
         - id: discovery-server
-          uri: lb://DISCOVERY-SERVER
+          uri: http://veldara-service-registry.azurewebsites.net
           predicates:
             - Path=/eureka/**
           filters:
@@ -22,11 +22,8 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://eureka:password@localhost:8761/eureka
+      defaultZone: http://veldara-service-registry.azurewebsites.net/eureka/
     register-with-eureka: true
     fetch-registry: true
-    proxy-user-name: ${EUREKA_USERNAME:eureka}
-    proxy-password: ${EUREKA_PASSWORD:password}
   instance:
     prefer-ip-address: true
-

@@ -1,5 +1,5 @@
 server:
-  port: 0
+  port: ${PRODUCT_SERVICE_PORT:80}
 
 spring:
   application:
@@ -21,10 +21,10 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://eureka:password@localhost:8761/eureka
+      defaultZone: http://veldara-service-registry.azurewebsites.net/eureka/
     register-with-eureka: true
     fetch-registry: true
-    proxy-user-name: ${EUREKA_USERNAME:eureka}
-    proxy-password: ${EUREKA_PASSWORD:password}
+
   instance:
-    hostname: localhost
+    prefer-ip-address: true
+    hostname: product-service.azurewebsites.net
