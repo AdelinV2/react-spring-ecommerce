@@ -21,7 +21,7 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: https://veldara-service-registry.azuremicroservices.io/
+      defaultZone: https://veldara-service-registry.azuremicroservices.io/eureka/
     register-with-eureka: true
     fetch-registry: true
 
