@@ -8,21 +8,21 @@ spring:
     gateway:
       routes:
         - id: product-service
-          uri: http://veldara-product-service.azurewebsites.net
+          uri: lb://PRODUCT-SERVICE
           predicates:
             - Path=/api/product/**
 
-        - id: discovery-server
-          uri: http://veldara-service-registry.azurewebsites.net
-          predicates:
-            - Path=/eureka/**
-          filters:
-            - SetPath=/
+#        - id: discovery-server
+#          uri: https://veldara-service-registry.azuremicroservices.io
+#          predicates:
+#            - Path=/eureka/**
+#          filters:
+#            - SetPath=/
 
 eureka:
   client:
     service-url:
-      defaultZone: http://veldara-service-registry.azurewebsites.net/eureka/
+      defaultZone: https://veldara-service-registry.azuremicroservices.io/
     register-with-eureka: true
     fetch-registry: true
   instance:
