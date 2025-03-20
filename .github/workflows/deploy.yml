@@ -51,18 +51,18 @@ jobs:
           az spring app deploy --name api-gateway \
             --service ${{ secrets.AZURE_SPRING_APPS_NAME }} \
             --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
-            --artifact-path api-gateway/target/api-gateway-0.0.1-SNAPSHOT.jar
+            --artifact-path **/api-gateway-0.0.1-SNAPSHOT.jar
 
       - name: Deploy Product Service
         run: |
           az spring app deploy --name product-service \
             --service ${{ secrets.AZURE_SPRING_APPS_NAME }} \
             --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
-            --artifact-path product-service/target/product-service-0.0.1-SNAPSHOT.jar
+            --artifact-path **/product-service-0.0.1-SNAPSHOT.jar
 
       - name: Deploy Service Discovery
         run: |
           az spring app deploy --name service-discovery \
             --service ${{ secrets.AZURE_SPRING_APPS_NAME }} \
             --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
-            --artifact-path service-discovery/target/service-discovery-0.0.1-SNAPSHOT.jar
+            --artifact-path **/service-discovery-0.0.1-SNAPSHOT.jar
