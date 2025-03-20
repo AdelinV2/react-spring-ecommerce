@@ -19,31 +19,50 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Build with Maven
-        run: mvn clean package -DskipTests
+      # Build for api-gateway
+      - name: Build api-gateway
+        run: |
+          cd backend/api-gateway
+          mvn clean install -DskipTests
 
-      - name: Authenticate with Azure
-        uses: azure/login@v2
+      # Build for service-registry
+      - name: Build service-registry
+        run: |
+          cd backend/service-registry
+          mvn clean install -DskipTests
+
+      # Build for product-service
+      - name: Build product-service
+        run: |
+          cd backend/product-service
+          mvn clean install -DskipTests
+
+      - name: Upload artifacts for deployment
+        uses: actions/upload-artifact@v4
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          name: java-apps
+          path: |
+            backend/api-gateway/target/api-gateway-0.0.1-SNAPSHOT.jar
+            backend/service-registry/target/service-registry-0.0.1-SNAPSHOT.jar
+            backend/product-service/target/product-service-0.0.1-SNAPSHOT.jar
 
       - name: Deploy API Gateway
         run: |
           az spring app deploy --name api-gateway \
             --service ${{ secrets.AZURE_SPRING_APPS_NAME }} \
             --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
-            --artifact-path api-gateway/target/api-gateway.jar
+            --artifact-path api-gateway/target/api-gateway-0.0.1-SNAPSHOT.jar
 
       - name: Deploy Product Service
         run: |
           az spring app deploy --name product-service \
             --service ${{ secrets.AZURE_SPRING_APPS_NAME }} \
             --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
-            --artifact-path product-service/target/product-service.jar
+            --artifact-path product-service/target/product-service-0.0.1-SNAPSHOT.jar
 
       - name: Deploy Service Discovery
         run: |
           az spring app deploy --name service-discovery \
             --service ${{ secrets.AZURE_SPRING_APPS_NAME }} \
             --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
-            --artifact-path service-discovery/target/service-discovery.jar
+            --artifact-path service-discovery/target/service-discovery-0.0.1-SNAPSHOT.jar
