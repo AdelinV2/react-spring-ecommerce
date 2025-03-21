@@ -1,0 +1,38 @@
+server:
+  port: ${USER_SERVICE_PORT:80}
+
+spring:
+  application:
+    name: user-service
+
+  datasource:
+    url: ${USER_DB_URL}
+    username: ${USER_DB_USERNAME}
+    password: ${USER_DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    producer:
+      retries: 3
+      acks: all
+    consumer:
+      group-id: user-service
+      auto-offset-reset: earliest
+
+eureka:
+  client:
+    service-url:
+      defaultZone: https://veldara-service-registry.azuremicroservices.io/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+
+  instance:
+    prefer-ip-address: true
