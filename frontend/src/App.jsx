@@ -10,7 +10,7 @@ function App() {
       <NavFooter />
       <ProductCard
         name="Parfum HUGO BOSS sadasda  adsdadasd dsadasdsa adasda"
-        oot={false}
+        oos={true}
         img="https://petapixel.com/assets/uploads/2023/06/Boss-Infinite-1536x1023.jpg"
         favourite={false}
         rating={4.5}

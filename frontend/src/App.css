@@ -43,12 +43,37 @@
 .nav-list
 {
   display: flex;
-  gap: 15px;
+  gap: 30px;
   list-style: none;
   
 }
 
 .nav-li-item{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.icon-navbar
+{
+  
+  width: 1.8em;
+}
+
+.heart-wishlist
+{
+  fill: var(--color);
+}
+
+.shopping-cart-icon-nav
+{
+  stroke: var(--color);
+}
+
+.account-icon
+{
+  fill: var(--color);
 }
 
 .item-link,.navfooter-link
@@ -73,7 +98,7 @@
 
 .item-link
 {
-  font-weight: 400;
+  font-weight: 500;
   text-transform: none;
 }
 
