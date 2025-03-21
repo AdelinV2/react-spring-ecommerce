@@ -24,7 +24,10 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private long id;
+    private int id;
+
+    @Column(name = "seller_id")
+    private int sellerId;
 
     @Column(name = "name")
     private String name;
@@ -55,6 +58,9 @@ public class Product {
 
     @Column(name = "available")
     private boolean available;
+
+    @Column(name = "card_img")
+    private boolean cardImg;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)

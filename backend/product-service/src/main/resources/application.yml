@@ -18,6 +18,15 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
 
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    producer:
+      retries: 3
+      acks: all
+    consumer:
+      group-id: product-service
+      auto-offset-reset: earliest
+
 eureka:
   client:
     service-url:
