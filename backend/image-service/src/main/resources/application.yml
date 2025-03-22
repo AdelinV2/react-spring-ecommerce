@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: image-service
+
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    producer:
+      retries: 3
+      acks: all
+    consumer:
+      group-id: image-service
+      auto-offset-reset: earliest
+
+#  cloud:
+#    azure:
+#      storage:
+#        account-name: ${AZURE_STORAGE_ACCOUNT_NAME}
+#        account-key: ${AZURE_STORAGE_ACCOUNT_KEY}
+  servlet:
+    multipart:
+      max-file-size: 1MB
+      max-request-size: 50MB
+
+eureka:
+  client:
+    service-url:
+      defaultZone: https://veldara-service-registry.azuremicroservices.io/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+
+  instance:
+    prefer-ip-address: true
+
+azure:
+  blob:
+    connection-string: ${AZURE_STORAGE_CONNECTION_STRING}
