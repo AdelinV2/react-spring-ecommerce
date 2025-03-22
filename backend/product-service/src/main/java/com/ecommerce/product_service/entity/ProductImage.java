@@ -1,13 +1,10 @@
 package com.ecommerce.product_service.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Getter
@@ -22,15 +19,13 @@ public class ProductImage {
     @Column(name = "id", nullable = false)
     private int id;
 
+    @Column(name = "product_id", nullable = false)
+    private int productId;
+
+    @Column(name = "order_index", nullable = false)
+    private int orderIndex;
+
     @Column(name = "image_url")
     private String imageUrl;
 
-    @Column(name = "file_name")
-    private String fileName;
-
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonBackReference
-    private Product product;
 }

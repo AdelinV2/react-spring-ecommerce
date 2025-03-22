@@ -48,6 +48,12 @@ jobs:
           cd backend/user-service
           mvn clean install -DskipTests
 
+      # Build for image-service
+      - name: Build image-service
+        run: |
+          cd backend/image-service
+          mvn clean install -DskipTests
+
       - name: Upload artifacts for deployment
         uses: actions/upload-artifact@v4
         with:
@@ -84,3 +90,10 @@ jobs:
             --service ${{ secrets.AZURE_SPRING_APPS_NAME }} \
             --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
             --artifact-path backend/user-service/target/user-service-0.0.1-SNAPSHOT.jar
+
+      - name: Deploy Image Service
+        run: |
+          az spring app deploy --name image-service \
+            --service ${{ secrets.AZURE_SPRING_APPS_NAME }} \
+            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+            --artifact-path backend/image-service/target/image-service-0.0.1-SNAPSHOT.jar

@@ -12,6 +12,16 @@ spring:
           predicates:
             - Path=/api/product/**
 
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+              - Path=/api/user/**
+
+        - id: image-service
+          uri: lb://IMAGE-SERVICE
+          predicates:
+              - Path=/api/image/**
+
 #        - id: discovery-server
 #          uri: https://veldara-service-registry.azuremicroservices.io
 #          predicates:
