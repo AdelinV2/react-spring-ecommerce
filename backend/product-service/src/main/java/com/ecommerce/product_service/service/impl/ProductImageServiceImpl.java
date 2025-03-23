@@ -1,6 +1,7 @@
-package com.ecommerce.product_service.service;
+package com.ecommerce.product_service.service.impl;
 
 import com.ecommerce.product_service.entity.ProductImage;
+import com.ecommerce.product_service.service.ProductImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +11,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductImageServiceImpl implements ProductImageService {
 
+    private final ProductImageService productImageService;
 
     @Override
     public void createProductImage(ProductImage productImage) {

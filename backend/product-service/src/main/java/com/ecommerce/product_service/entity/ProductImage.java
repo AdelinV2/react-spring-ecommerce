@@ -1,14 +1,12 @@
 package com.ecommerce.product_service.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Getter
 @Setter
+@Builder
 @Table(name = "product_images")
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,8 +17,9 @@ public class ProductImage {
     @Column(name = "id", nullable = false)
     private int id;
 
-    @Column(name = "product_id", nullable = false)
-    private int productId;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "product_id")
+    private Product product;
 
     @Column(name = "order_index", nullable = false)
     private int orderIndex;

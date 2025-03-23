@@ -1,5 +1,6 @@
 package com.ecommerce.product_service.service;
 
+import com.ecommerce.product_service.dto.ProductDto;
 import com.ecommerce.product_service.entity.Product;
 
 import java.util.List;
@@ -13,17 +14,15 @@ public interface ProductService {
      * Create a new product.
      *
      * @param product the product to create
-     * @return the created product
      */
-    Product createProduct(Product product);
+    void createProduct(ProductDto product);
 
     /**
      * Update a product.
      *
      * @param product the product to update
-     * @return the updated product
      */
-    Product updateProduct(Product product);
+    void updateProduct(ProductDto product);
 
     /**
      * Delete a product.

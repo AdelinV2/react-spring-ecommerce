@@ -1,18 +1,17 @@
 package com.ecommerce.product_service.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Entity
+@Builder
 @Table(name = "products")
 public class Product {
 
@@ -54,6 +53,16 @@ public class Product {
     @Column(name = "available")
     private boolean available;
 
-    @Column(name = "card_img")
-    private boolean cardImg;
+    @OneToMany(mappedBy = "productId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "product_id")
+    private List<ProductImage> images;
+
+    @OneToMany(mappedBy = "productId", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "product_id")
+    private List<Specification> specifications;
+
+    @PreRemove
+    private void preRemove() {
+        // TODO send kafka message for image deletion
+    }
 }

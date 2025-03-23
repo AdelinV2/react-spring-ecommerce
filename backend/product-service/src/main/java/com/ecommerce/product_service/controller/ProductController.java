@@ -1,8 +1,9 @@
 package com.ecommerce.product_service.controller;
 
+import com.ecommerce.product_service.dto.ProductDto;
 import com.ecommerce.product_service.entity.Product;
-import com.ecommerce.product_service.service.ProductImageServiceImpl;
-import com.ecommerce.product_service.service.ProductServiceImpl;
+import com.ecommerce.product_service.service.impl.ProductImageServiceImpl;
+import com.ecommerce.product_service.service.impl.ProductServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class ProductController {
 
-    private final ProductImageServiceImpl productImageService;
     private final ProductServiceImpl productService;
 
     @GetMapping("/{id}")
@@ -30,27 +30,19 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
+    public ResponseEntity<Product> createProduct(@RequestBody ProductDto product) {
 
-        Product savedProduct = productService.createProduct(product);
+        productService.createProduct(product);
 
-        if (savedProduct == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedProduct);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PutMapping
-    public ResponseEntity<Product> updateProduct(@RequestBody Product product) {
+    public ResponseEntity<Product> updateProduct(@RequestBody ProductDto product) {
 
-        Product savedProduct = productService.updateProduct(product);
+        productService.updateProduct(product);
 
-        if (savedProduct == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-
-        return ResponseEntity.ok(savedProduct);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
