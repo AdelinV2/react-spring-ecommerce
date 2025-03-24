@@ -1,5 +1,6 @@
 package com.ecommerce.product_service.entity;
 
+import com.ecommerce.product_service.listener.ProductEntityListener;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,6 +14,7 @@ import java.util.List;
 @Entity
 @Builder
 @Table(name = "products")
+@EntityListeners(ProductEntityListener.class)
 public class Product {
 
     @Id
@@ -61,8 +63,4 @@ public class Product {
     @JoinColumn(name = "product_id")
     private List<Specification> specifications;
 
-    @PreRemove
-    private void preRemove() {
-        // TODO send kafka message for image deletion
-    }
 }

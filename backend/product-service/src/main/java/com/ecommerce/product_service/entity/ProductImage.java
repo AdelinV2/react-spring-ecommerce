@@ -22,7 +22,7 @@ public class ProductImage {
     private Product product;
 
     @Column(name = "order_index", nullable = false)
-    private int orderIndex;
+    private byte orderIndex;
 
     @Column(name = "image_url")
     private String imageUrl;

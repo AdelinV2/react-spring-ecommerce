@@ -19,7 +19,7 @@ public class ProductImageDto implements Serializable {
 
     int id;
     int productId;
-    int orderIndex;
+    byte orderIndex;
     MultipartFile file;
 
     public static ProductImageDto fromEntity(com.ecommerce.product_service.entity.ProductImage productImage) {

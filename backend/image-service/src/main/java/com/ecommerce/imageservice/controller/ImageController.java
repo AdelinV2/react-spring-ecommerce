@@ -20,9 +20,8 @@ public class ImageController {
 
     @PostMapping("/upload")
     public String uploadImage(@RequestParam("containerName") ContainerName containerName,
-                              @RequestParam("fileName") String fileName,
                               @RequestParam("file") MultipartFile file) throws IOException {
 
-        return azureBlobStorageService.uploadImage(containerName, fileName, file);
+        return azureBlobStorageService.uploadImage(containerName, file);
     }
 }

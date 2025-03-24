@@ -3,6 +3,7 @@ package com.ecommerce.product_service.service;
 import com.ecommerce.product_service.dto.ProductDto;
 import com.ecommerce.product_service.entity.Product;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -15,7 +16,7 @@ public interface ProductService {
      *
      * @param product the product to create
      */
-    void createProduct(ProductDto product);
+    void createProduct(ProductDto product) throws IOException;
 
     /**
      * Update a product.
