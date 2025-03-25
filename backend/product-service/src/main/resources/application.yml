@@ -13,10 +13,11 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update # TODO: Change to update in production
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
+    open-in-view: false
 
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
