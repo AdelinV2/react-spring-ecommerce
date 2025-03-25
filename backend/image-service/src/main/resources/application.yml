@@ -1,3 +1,6 @@
+server:
+  port: ${IMAGE_SERVICE_PORT:80}
+
 spring:
   application:
     name: image-service
@@ -16,10 +19,7 @@ spring:
     properties:
       security.protocol: SASL_SSL
       sasl.mechanism: PLAIN
-      sasl.jaas.config: >
-        org.apache.kafka.common.security.plain.PlainLoginModule required
-        username="\$ConnectionString"
-        password="${KAFKA_PASSWORD}";
+      sasl.jaas.config: "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"$ConnectionString\" password=\"${KAFKA_PASSWORD}\";"
 
   servlet:
     multipart:

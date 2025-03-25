@@ -12,7 +12,7 @@ public class ProductKafkaConsumer {
 
     private final ProductImageServiceImpl productImageService;
 
-    @KafkaListener(topics = "product-image-topic", groupId = "product-group")
+    @KafkaListener(topics = "product-image-created-topic", groupId = "product-group")
     public void consumeProductImage(ConsumerRecord<String, ProductImage> record) {
 
         ProductImage productImage = record.value();

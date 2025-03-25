@@ -12,6 +12,6 @@ public class ImageKafkaProducer {
     private final KafkaTemplate<String, String> kafkaTemplate;
 
     public void sendProductImageMessage(ProductImageDto productImageDto) {
-        kafkaTemplate.send("product-image-topic", productImageDto.toJsonString());
+        kafkaTemplate.send("product-image-created-topic", productImageDto.toJsonString());
     }
 }
