@@ -13,7 +13,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create # TODO: Change to update in production
+      ddl-auto: update # TODO: Change to update in production
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect

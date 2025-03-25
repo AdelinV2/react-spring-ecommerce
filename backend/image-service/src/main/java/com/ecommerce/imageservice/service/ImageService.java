@@ -18,7 +18,6 @@ import java.util.Map;
 public class ImageService {
 
     private final AzureBlobStorageService azureBlobStorageService;
-    private final ImageKafkaConsumer imageKafkaConsumer;
     private final ImageKafkaProducer imageKafkaProducer;
 
     public void uploadProductImage(String message) {

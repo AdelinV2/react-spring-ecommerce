@@ -13,7 +13,6 @@ import java.util.List;
 public class SubSpecificationServiceImpl implements SubSpecificationService {
 
     private final SubSpecificationRepository subSpecificationRepository;
-    private final SpecificationServiceImpl specificationService;
 
     @Override
     public SubSpecification getSubSpecificationById(Integer subSpecificationId) {

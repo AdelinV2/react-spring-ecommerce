@@ -2,6 +2,9 @@ spring:
   application:
     name: image-service
 
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
     producer:
@@ -15,7 +18,7 @@ spring:
       sasl.mechanism: PLAIN
       sasl.jaas.config: >
         org.apache.kafka.common.security.plain.PlainLoginModule required
-        username="$ConnectionString"
+        username="\$ConnectionString"
         password="${KAFKA_PASSWORD}";
 
   servlet:

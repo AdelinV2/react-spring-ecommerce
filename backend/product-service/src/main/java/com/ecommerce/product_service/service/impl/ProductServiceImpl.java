@@ -18,7 +18,6 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
-    private final ProductImageServiceImpl productImageService;
     private final SpecificationServiceImpl specificationService;
     private final ProductKafkaProducer kafkaProducer;
 
