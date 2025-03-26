@@ -1,12 +1,15 @@
-name: Deploy to Azure Spring Apps
+name: Build and Package
 
 on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,84 +19,138 @@ jobs:
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
+          distribution: temurin
           java-version: '17'
 
-      - name: Login to Azure
-        uses: azure/login@v2
+      - name: Install Maven
+        run: |
+          sudo apt-get update
+          sudo apt-get install maven -y
+
+      - name: Cache Maven packages
+        uses: actions/cache@v4
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          path: ~/.m2
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-maven
 
-      # Build for api-gateway
-      - name: Build api-gateway
+      - name: Build project with Maven (including Jib image build)
         run: |
-          cd backend/api-gateway
+          cd backend
           mvn clean install -DskipTests
 
-      # Build for service-registry
-      - name: Build service-registry
-        run: |
-          cd backend/service-registry
-          mvn clean install -DskipTests
 
-      # Build for product-service
-      - name: Build product-service
-        run: |
-          cd backend/product-service
-          mvn clean install -DskipTests
 
-      # Build for user-service
-      - name: Build user-service
-        run: |
-          cd backend/user-service
-          mvn clean install -DskipTests
 
-      # Build for image-service
-      - name: Build image-service
-        run: |
-          cd backend/image-service
-          mvn clean install -DskipTests
 
-      - name: Upload artifacts for deployment
-        uses: actions/upload-artifact@v4
-        with:
-          name: java-apps
-          path: |
-            backend/api-gateway/target/api-gateway-0.0.1-SNAPSHOT.jar
-            backend/service-registry/target/service-registry-0.0.1-SNAPSHOT.jar
-            backend/product-service/target/product-service-0.0.1-SNAPSHOT.jar
 
-      - name: Deploy API Gateway
-        run: |
-          az spring app deploy --name api-gateway \
-            --service ${{ secrets.AZURE_SPRING_APPS_NAME }} \
-            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
-            --artifact-path backend/api-gateway/target/api-gateway-0.0.1-SNAPSHOT.jar
 
-      - name: Deploy Product Service
-        run: |
-          az spring app deploy --name product-service \
-            --service ${{ secrets.AZURE_SPRING_APPS_NAME }} \
-            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
-            --artifact-path backend/product-service/target/product-service-0.0.1-SNAPSHOT.jar
 
-      - name: Deploy Service Discovery
-        run: |
-          az spring app deploy --name service-registry \
-            --service ${{ secrets.AZURE_SPRING_APPS_NAME }} \
-            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
-            --artifact-path backend/service-registry/target/service-registry-0.0.1-SNAPSHOT.jar
+#                 Deploy to Azure canceled
 
-      - name: Deploy User Service
-        run: |
-          az spring app deploy --name user-service \
-            --service ${{ secrets.AZURE_SPRING_APPS_NAME }} \
-            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
-            --artifact-path backend/user-service/target/user-service-0.0.1-SNAPSHOT.jar
-
-      - name: Deploy Image Service
-        run: |
-          az spring app deploy --name image-service \
-            --service ${{ secrets.AZURE_SPRING_APPS_NAME }} \
-            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
-            --artifact-path backend/image-service/target/image-service-0.0.1-SNAPSHOT.jar
+#name: Deploy to Azure Spring Apps
+#
+#on:
+#  push:
+#    branches:
+#      - main
+#
+#jobs:
+#  build-and-deploy:
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Checkout repository
+#        uses: actions/checkout@v4
+#
+#      - name: Set up JDK 17
+#        uses: actions/setup-java@v4
+#        with:
+#          distribution: 'temurin'
+#          java-version: '17'
+#
+#      - name: Filter service changes
+#        id: filter
+#        uses: dorny/paths-filter@v3
+#        with:
+#          filters: |
+#            api-gateway: 'backend/api-gateway/**'
+#            service-registry: 'backend/service-registry/**'
+#            product-service: 'backend/product-service/**'
+#            user-service: 'backend/user-service/**'
+#            image-service: 'backend/image-service/**'
+#
+#      - name: Login to Azure
+#        uses: azure/login@v2
+#        with:
+#          creds: ${{ secrets.AZURE_CREDENTIALS }}
+#
+#      - name: Build service-registry
+#        if: steps.filter.outputs.service-registry == 'true'
+#        run: |
+#          cd backend/service-registry
+#          mvn clean install -DskipTests
+#
+#      - name: Build api-gateway
+#        if: steps.filter.outputs.api-gateway == 'true'
+#        run: |
+#          cd backend/api-gateway
+#          mvn clean install -DskipTests
+#
+#      - name: Build product-service
+#        if: steps.filter.outputs.product-service == 'true'
+#        run: |
+#          cd backend/product-service
+#          mvn clean install -DskipTests
+#
+#      - name: Build user-service
+#        if: steps.filter.outputs.user-service == 'true'
+#        run: |
+#          cd backend/user-service
+#          mvn clean install -DskipTests
+#
+#      - name: Build image-service
+#        if: steps.filter.outputs.image-service == 'true'
+#        run: |
+#          cd backend/image-service
+#          mvn clean install -DskipTests
+#
+#      - name: Deploy Service Discovery
+#        if: steps.filter.outputs.service-registry == 'true'
+#        run: |
+#          az spring app deploy --name service-registry \
+#            --service ${{ secrets.AZURE_SPRING_APPS_NAME }} \
+#            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+#            --artifact-path backend/service-registry/target/service-registry-0.0.1-SNAPSHOT.jar
+#
+#      - name: Deploy API Gateway
+#        if: steps.filter.outputs.api-gateway == 'true'
+#        run: |
+#          az spring app deploy --name api-gateway \
+#            --service ${{ secrets.AZURE_SPRING_APPS_NAME }} \
+#            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+#            --artifact-path backend/api-gateway/target/api-gateway-0.0.1-SNAPSHOT.jar
+#
+#      - name: Deploy Product Service
+#        if: steps.filter.outputs.product-service == 'true'
+#        run: |
+#          az spring app deploy --name product-service \
+#            --service ${{ secrets.AZURE_SPRING_APPS_NAME }} \
+#            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+#            --artifact-path backend/product-service/target/product-service-0.0.1-SNAPSHOT.jar
+#
+#      - name: Deploy User Service
+#        if: steps.filter.outputs.user-service == 'true'
+#        run: |
+#          az spring app deploy --name user-service \
+#            --service ${{ secrets.AZURE_SPRING_APPS_NAME }} \
+#            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+#            --artifact-path backend/user-service/target/user-service-0.0.1-SNAPSHOT.jar
+#
+#      - name: Deploy Image Service
+#        if: steps.filter.outputs.image-service == 'true'
+#        run: |
+#          az spring app deploy --name image-service \
+#            --service ${{ secrets.AZURE_SPRING_APPS_NAME }} \
+#            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+#            --artifact-path backend/image-service/target/image-service-0.0.1-SNAPSHOT.jar

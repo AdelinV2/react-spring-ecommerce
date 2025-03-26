@@ -1,34 +1,102 @@
-version: '3.8'
+version: "3.8"
 
 services:
   zookeeper:
-    image: confluentinc/cp-zookeeper:latest
+    image: wurstmeister/zookeeper:3.4.6
     environment:
-      ZOOKEEPER_SERVER_ID: 1
-      ZOOKEEPER_LISTENER_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_SYNC_LIMIT: 2
     ports:
       - "2181:2181"
     networks:
-      - kafka-net
+      - ecommerce_network
+    restart: always
 
   kafka:
     image: wurstmeister/kafka:latest
     environment:
-      KAFKA_ADVERTISED_LISTENERS: INSIDE-KAFKA:9093
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka:9093
       KAFKA_LISTENER_SECURITY_PROTOCOL: PLAINTEXT
-      KAFKA_LISTENER_NAME_INTERNAL: INSIDE
-      KAFKA_LISTENER_INTERNAL_PORT: 9093
-      KAFKA_LISTENER_PORT: 9092
+      KAFKA_LISTENER_NAME_INSIDE: INSIDE
+      KAFKA_LISTENERS: INSIDE://0.0.0.0:9093
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_LISTENER_INTERNAL: INSIDE-KAFKA
-      KAFKA_LISTENER_INTERNAL_HOST: kafka
+      KAFKA_LISTENER_PORT: 9093
+      KAFKA_LISTENER_NAME: INSIDE
+      KAFKA_LISTENER_INTERNAL_PORT: 9093
     ports:
-      - "9092:9092"
+      - "9093:9093"
     depends_on:
       - zookeeper
     networks:
-      - kafka-net
+      - ecommerce_network
+    restart: always
+
+  service-registry:
+    image: adelinv2/react-spring-ecommerce.eureka-server
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    ports:
+      - "8761:8761"
+    networks:
+      - ecommerce_network
+    restart: always
+    depends_on:
+      - kafka
+
+  api-gateway:
+    image: adelinv2/react-spring-ecommerce.api-gateway
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      EUREKA_SERVER: service-registry:8761
+    ports:
+      - "8080:8080"
+    depends_on:
+      - service-registry
+      - kafka
+    networks:
+      - ecommerce_network
+    restart: always
+
+  product-service:
+    image: adelinv2/react-spring-ecommerce.product-service
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      DB_URL: ${PRODUCT_DB_URL}
+      DB_USERNAME: ${PRODUCT_DB_USERNAME}
+      DB_PASSWORD: ${PRODUCT_DB_PASSWORD}
+    depends_on:
+      - kafka
+    networks:
+      - ecommerce_network
+    restart: always
+
+  user-service:
+    image: adelinv2/react-spring-ecommerce.user-service
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      DB_URL: ${USER_DB_URL}
+      DB_USERNAME: ${USER_DB_USERNAME}
+      DB_PASSWORD: ${USER_DB_PASSWORD}
+    depends_on:
+      - kafka
+      - service-registry
+    networks:
+      - ecommerce_network
+    restart: always
+
+  image-service:
+    image: adelinv2/react-spring-ecommerce.image-service
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      AZURE_STORAGE_ACCOUNT_NAME: ${AZURE_STORAGE_ACCOUNT_NAME}
+      AZURE_STORAGE_ACCOUNT_KEY: ${AZURE_STORAGE_ACCOUNT_KEY}
+      AZURE_STORAGE_CONNECTION_STRING: ${AZURE_STORAGE_CONNECTION_STRING}
+    depends_on:
+      - kafka
+    networks:
+      - ecommerce_network
+    restart: always
 
 networks:
-  kafka-net:
-    driver: bridge
+   ecommerce_network:
+     driver: bridge
