@@ -29,30 +29,29 @@ public class SpecificationServiceImpl implements SpecificationService {
     @Override
     public void saveSpecification(Specification specification) {
 
-        for (SubSpecification subSpecification : specification.getSubSpecifications()) {
-            subSpecificationService.saveSubSpecification(subSpecification);
-        }
 
         specificationRepository.save(specification);
+
+        for (SubSpecification subSpecification : specification.getSubSpecifications()) {
+
+            subSpecification.setSpecification(specification);
+            subSpecificationService.saveSubSpecification(subSpecification);
+        }
     }
 
     @Override
     public void updateSpecification(Specification specification) {
 
+        specificationRepository.save(specification);
+
         for (SubSpecification subSpecification : specification.getSubSpecifications()) {
             subSpecificationService.updateSubSpecification(subSpecification);
         }
-
-        specificationRepository.save(specification);
     }
 
     @Override
     public void deleteSpecificationById(Integer specificationId) {
 
-        Specification specification = specificationRepository.findById(specificationId).orElse(null);
-
-        if (specification != null) {
-            specificationRepository.delete(specification);
-        }
+        specificationRepository.findById(specificationId).ifPresent(specificationRepository::delete);
     }
 }

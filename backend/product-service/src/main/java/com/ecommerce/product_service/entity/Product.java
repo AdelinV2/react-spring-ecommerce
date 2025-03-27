@@ -3,6 +3,8 @@ package com.ecommerce.product_service.entity;
 import com.ecommerce.product_service.listener.ProductEntityListener;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -43,9 +45,11 @@ public class Product {
     @Column(name = "stock")
     private int stock;
 
+    @CreationTimestamp
     @Column(name = "created_date")
     private LocalDateTime createdDate;
 
+    @UpdateTimestamp
     @Column(name = "updated_date")
     private LocalDateTime updatedDate;
 

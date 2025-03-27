@@ -5,6 +5,7 @@ import com.ecommerce.product_service.dto.ProductDto;
 import com.ecommerce.product_service.dto.ProductImageDto;
 import com.ecommerce.product_service.dto.SpecificationDto;
 import com.ecommerce.product_service.entity.Product;
+import com.ecommerce.product_service.entity.Specification;
 import com.ecommerce.product_service.repository.ProductRepository;
 import com.ecommerce.product_service.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,11 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void createProduct(ProductDto product) throws IOException {
 
+
+        Product newProduct = ProductDto.toEntity(product);
+
+        productRepository.save(newProduct);
+
         for (ProductImageDto productImage : product.getImages()) {
 
             FileMessageDto message = FileMessageDto.builder()
@@ -38,12 +44,11 @@ public class ProductServiceImpl implements ProductService {
         }
 
         for (SpecificationDto specification : product.getSpecifications()) {
-            specificationService.saveSpecification(SpecificationDto.toEntity(specification));
+
+            Specification newSpecification = SpecificationDto.toEntity(specification);
+            newSpecification.setProduct(newProduct);
+            specificationService.saveSpecification(newSpecification);
         }
-
-        Product newProduct = ProductDto.toEntity(product);
-
-        productRepository.save(newProduct);
     }
 
     @Override

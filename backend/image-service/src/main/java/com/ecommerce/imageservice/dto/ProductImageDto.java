@@ -2,22 +2,14 @@ package com.ecommerce.imageservice.dto;
 
 import lombok.*;
 
+import java.io.Serializable;
+
 @Value
-@Getter
-@Setter
 @Builder
-@AllArgsConstructor
-public class ProductImageDto {
+public class ProductImageDto implements Serializable {
 
     int productId;
     byte orderIndex;
     String imageUrl;
 
-    public String toJsonString() {
-        return "{" +
-                "\"productId\":" + productId + "," +
-                "\"orderIndex\":" + orderIndex + "," +
-                "\"imageUrl\":\"" + imageUrl + "\"" +
-                "}";
-    }
 }

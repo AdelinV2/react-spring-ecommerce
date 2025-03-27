@@ -1,8 +1,8 @@
 package com.ecommerce.product_service.dto;
 
 import com.ecommerce.product_service.entity.Product;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;
 import java.util.List;
@@ -10,12 +10,10 @@ import java.util.List;
 /**
  * DTO for {@link com.ecommerce.product_service.entity.Product}
  */
+@JsonDeserialize(builder = ProductDto.ProductDtoBuilder.class)
 @Value
-@Getter
-@Setter
-@AllArgsConstructor
 @Builder
-public class ProductDto {
+public class ProductDto implements Serializable {
 
     int id;
     int sellerId;

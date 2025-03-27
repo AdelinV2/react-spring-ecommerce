@@ -10,10 +10,7 @@ import java.util.List;
  * DTO for {@link com.ecommerce.product_service.entity.Specification}
  */
 @Value
-@Getter
-@Setter
 @Builder
-@AllArgsConstructor
 public class SpecificationDto implements Serializable {
 
     int id;

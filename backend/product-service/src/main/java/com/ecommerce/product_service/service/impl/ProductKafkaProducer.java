@@ -2,6 +2,8 @@ package com.ecommerce.product_service.service.impl;
 
 import com.ecommerce.product_service.dto.FileMessageDto;
 import com.ecommerce.product_service.dto.ProductMessageDto;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,12 @@ public class ProductKafkaProducer {
     }
 
     public void sendProductDeletedMessage(ProductMessageDto productMessageDto) {
-        kafkaTemplate.send("product-deleted-topic", productMessageDto.toJsonString());
+
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            kafkaTemplate.send("product-deleted-topic", objectMapper.writeValueAsString(productMessageDto));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
     }
 }

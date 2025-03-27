@@ -2,12 +2,11 @@ package com.ecommerce.product_service.dto;
 
 import lombok.*;
 
+import java.io.Serializable;
+
 @Value
-@Getter
-@Setter
 @Builder
-@AllArgsConstructor
-public class FileMessageDto {
+public class FileMessageDto implements Serializable {
 
     int productId;
     byte orderIndex;

@@ -2,22 +2,13 @@ package com.ecommerce.product_service.dto;
 
 import lombok.*;
 
+import java.io.Serializable;
+
 @Value
-@Getter
-@Setter
 @Builder
-@AllArgsConstructor
-public class ProductMessageDto {
+public class ProductMessageDto implements Serializable {
 
     int id;
     int sellerId;
     String name;
-
-    public String toJsonString() {
-        return "{" +
-                "\"id\":" + id + "," +
-                "\"sellerId\":" + sellerId + "," +
-                "\"name\":\"" + name + "\"" +
-                "}";
-    }
 }

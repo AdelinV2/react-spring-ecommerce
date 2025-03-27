@@ -2,12 +2,11 @@ package com.ecommerce.imageservice.dto;
 
 import lombok.*;
 
+import java.io.Serializable;
+
 @Value
-@Getter
-@Setter
 @Builder
-@AllArgsConstructor
-public class ProductImageFileDto {
+public class ProductImageFileDto implements Serializable {
 
     int productId;
     byte orderIndex;
