@@ -34,15 +34,15 @@ public class ProductController {
     @PostMapping
     public ResponseEntity<Product> createProduct(@RequestBody ProductDto product) throws IOException {
 
-        productService.createProduct(product);
+        productService.saveProduct(product);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PutMapping
-    public ResponseEntity<Product> updateProduct(@RequestBody ProductDto product) {
+    public ResponseEntity<Product> updateProduct(@RequestBody ProductDto product) throws IOException {
 
-        productService.updateProduct(product);
+        productService.saveProduct(product);
 
         return ResponseEntity.ok().build();
     }

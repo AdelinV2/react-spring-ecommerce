@@ -12,18 +12,11 @@ import java.util.List;
 public interface ProductService {
 
     /**
-     * Create a new product.
+     * Save product.
      *
-     * @param product the product to create
+     * @param product the product to save
      */
-    void createProduct(ProductDto product) throws IOException;
-
-    /**
-     * Update a product.
-     *
-     * @param product the product to update
-     */
-    void updateProduct(ProductDto product);
+    void saveProduct(ProductDto product) throws IOException;
 
     /**
      * Delete a product.

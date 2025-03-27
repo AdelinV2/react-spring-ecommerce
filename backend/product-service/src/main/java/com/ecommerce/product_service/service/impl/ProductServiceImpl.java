@@ -23,8 +23,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductKafkaProducer kafkaProducer;
 
     @Override
-    public void createProduct(ProductDto product) throws IOException {
-
+    public void saveProduct(ProductDto product) throws IOException {
 
         Product newProduct = ProductDto.toEntity(product);
 
@@ -49,11 +48,6 @@ public class ProductServiceImpl implements ProductService {
             newSpecification.setProduct(newProduct);
             specificationService.saveSpecification(newSpecification);
         }
-    }
-
-    @Override
-    public void updateProduct(ProductDto product) {
-
     }
 
     @Override
