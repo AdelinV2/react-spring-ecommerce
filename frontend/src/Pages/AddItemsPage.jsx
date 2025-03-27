@@ -3,9 +3,8 @@ import { useState } from "react";
 import "../css/AddItemsPage.css";
 
 export default function AddItemsPage() {
-
-  const[specifications,setSpecifications]=useState()
-  const [images, setImages] = useState(Array(10).fill(null));
+  const [specifications, setSpecifications] = useState([]);
+  const [images, setImages] = useState([]);
   const [product, setProduct] = useState({
     sellerId: 0,
     name: 0,
@@ -16,11 +15,30 @@ export default function AddItemsPage() {
     stock: 0,
     weight: 0,
     available: false,
-    images: [],
-    specifications: [],
+    images: images,
+    specifications: specifications,
   });
 
+  console.log(product);
+
   function handleSubmit() {}
+  function handleImgChange(e) {
+    const imgs = e.target.files;
+    const imgsObj = Array.from(imgs)
+      .filter((img) => {
+        return img.type.startsWith("image/");
+      })
+      .map((img, index) => ({
+        orderIndex: index,
+        file: img,
+      }));
+
+    setImages(imgsObj);
+    setProduct((prevProduct) => ({
+      ...prevProduct,
+      images: imgsObj,
+    }));
+  }
 
   return (
     <>
@@ -70,7 +88,13 @@ export default function AddItemsPage() {
           name="weight"
           placeholder="5"
         />
-        <input type="file" className="form-input" name="img" />
+        <input
+          type="file"
+          className="form-input"
+          name="img"
+          multiple
+          onChange={handleImgChange}
+        />
         <button className="form-btn" type="submit">
           Add Product
         </button>

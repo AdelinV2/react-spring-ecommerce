@@ -9,7 +9,7 @@ export default function Home() {
       <NavFooter />
       <ProductCard
         name="Parfum HUGO BOSS sadasda  adsdadasd dsadasdsa adasda"
-        oos={true}
+        oos={false}
         img="https://petapixel.com/assets/uploads/2023/06/Boss-Infinite-1536x1023.jpg"
         favourite={false}
         rating={4.5}
