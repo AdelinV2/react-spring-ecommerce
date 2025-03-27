@@ -4,6 +4,7 @@ package com.ecommerce.imageservice.service;
 import com.ecommerce.imageservice.dto.ProductImageDto;
 import com.ecommerce.imageservice.dto.ProductImageFileDto;
 import com.ecommerce.imageservice.util.ContainerName;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mock.web.MockMultipartFile;
@@ -22,10 +23,10 @@ public class ImageService {
 
     public void uploadProductImage(String message) {
 
-        ProductImageFileDto productImageFileDto = ProductImageFileDto.fromString(message);
-        String url;
-
         try {
+            ObjectMapper mapper = new ObjectMapper();
+            ProductImageFileDto productImageFileDto = mapper.readValue(message, ProductImageFileDto.class);
+
             String newFileName = productImageFileDto.getProductId() + "_" + productImageFileDto.getFileName();
 
             MultipartFile multipartFile = new MockMultipartFile(
@@ -35,7 +36,7 @@ public class ImageService {
                     Base64.getDecoder().decode(productImageFileDto.getData())
             );
 
-            url = azureBlobStorageService.uploadImage(ContainerName.PRODUCT, multipartFile);
+            String url = azureBlobStorageService.uploadImage(ContainerName.PRODUCT, multipartFile);
 
             ProductImageDto productImageDto = ProductImageDto.builder()
                     .imageUrl(url)

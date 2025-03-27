@@ -35,9 +35,9 @@ public class ProductServiceImpl implements ProductService {
             FileMessageDto message = FileMessageDto.builder()
                     .productId(productImage.getProductId())
                     .orderIndex(productImage.getOrderIndex())
-                    .fileName(productImage.getFile().getOriginalFilename())
-                    .fileType(productImage.getFile().getContentType())
-                    .data(Base64.getEncoder().encodeToString(productImage.getFile().getBytes()))
+                    .fileName(productImage.getFileName())
+                    .fileType(productImage.getFileType())
+                    .data(productImage.getData())
                     .build();
 
             kafkaProducer.sendImageMessage(message);

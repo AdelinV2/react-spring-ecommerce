@@ -16,7 +16,7 @@ public class ImageKafkaProducer {
     public void sendProductImageMessage(ProductImageDto productImageDto) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            kafkaTemplate.send("product-image-topic", objectMapper.writeValueAsString(productImageDto));
+            kafkaTemplate.send("product-image-created-topic", objectMapper.writeValueAsString(productImageDto));
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
