@@ -7,7 +7,7 @@ export default function AddItemsPage() {
   const [images, setImages] = useState([]);
   const [product, setProduct] = useState({
     sellerId: 0,
-    name: 0,
+    name: "",
     category: "",
     description: "",
     price: 0,
@@ -21,29 +21,54 @@ export default function AddItemsPage() {
 
   console.log(product);
 
-  function handleSubmit() {}
-  function handleImgChange(e) {
-    const imgs = e.target.files;
-    const imgsObj = Array.from(imgs)
-      .filter((img) => {
-        return img.type.startsWith("image/");
-      })
-      .map((img, index) => ({
-        orderIndex: index,
-        file: img,
-      }));
+  function updateSpecifications(category, spec) {
+    const specs = [...specifications];
+    const specItem = { category: category, specs: spec };
+    specs.push(specItem);
+    setSpecifications(specs);
+  }
 
-    setImages(imgsObj);
-    setProduct((prevProduct) => ({
-      ...prevProduct,
-      images: imgsObj,
-    }));
+  function handleSubmit(e) {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    updateSpecifications(formData.get("category"), formData.get("spec"));
+    const newProduct = {
+      name: formData.get("name"),
+      description: formData.get("description"),
+      category: formData.get("category"),
+      price: parseFloat(formData.get("price")),
+      stock: parseInt(formData.get("stock")),
+      weight: parseFloat(formData.get("weight")),
+      available: true,
+      images: images,
+      specifications: specifications,
+    };
+    setProduct(newProduct);
+  }
+
+  function handleImgChange(e) {
+    const imgs = Array.from(e.target.files);
+    const imgsObj = [];
+
+    imgs.forEach((img) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(img);
+      reader.onload = (e) => {
+        imgsObj.push({
+          fileName: img.name,
+          data: e.target.result.split(",")[1],
+          fileType: img.type,
+        });
+      };
+
+      setImages(imgsObj);
+    });
   }
 
   return (
     <>
       <Link to="/">Back</Link>
-      <form className="add-product-form" action={handleSubmit}>
+      <form className="add-product-form" onSubmit={handleSubmit}>
         <span className="form-label">Nume:</span>
         <input
           className="form-input"
@@ -65,11 +90,19 @@ export default function AddItemsPage() {
           name="category"
           placeholder="Parfumuri"
         />
+        <span className="form-label">Specificatii:</span>
+        <input
+          className="form-input"
+          type="text"
+          name="spec"
+          placeholder="Parfumuri"
+        />
         <span className="form-label">Pret:</span>
         <input
           className="form-input"
           type="number"
           name="price"
+          step="0.01"
           placeholder="399.99"
         />
         <span className="form-label">Stock:</span>
