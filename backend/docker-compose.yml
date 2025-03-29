@@ -23,6 +23,9 @@ services:
     image: adelinv2/react-spring-ecommerce.service-registry
     environment:
       SPRING_PROFILES_ACTIVE: docker
+      KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BOOTSTRAP_SERVERS}
+      KAFKA_PASSWORD: ${KAFKA_PASSWORD}
+      SERVICE_REGISTRY_PORT: 8761
     ports:
       - "8761:8761"
     networks:
@@ -36,8 +39,12 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: docker
       EUREKA_SERVER: service-registry:8761
+      KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BOOTSTRAP_SERVERS}
+      KAFKA_PASSWORD: ${KAFKA_PASSWORD}
+      API_GATEWAY_PORT: 8000
+      EUREKA_SERVER_URL: http://service-registry:8761/eureka/
     ports:
-      - "8080:8080"
+      - "8000:8000"
     depends_on:
       - service-registry
 #      - kafka
@@ -49,10 +56,15 @@ services:
     image: adelinv2/react-spring-ecommerce.product-service
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      DB_URL: ${PRODUCT_DB_URL}
-      DB_USERNAME: ${PRODUCT_DB_USERNAME}
-      DB_PASSWORD: ${PRODUCT_DB_PASSWORD}
-#    depends_on:
+      PRODUCT_DB_URL: ${PRODUCT_DB_URL}
+      PRODUCT_DB_USERNAME: ${PRODUCT_DB_USERNAME}
+      PRODUCT_DB_PASSWORD: ${PRODUCT_DB_PASSWORD}
+      KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BOOTSTRAP_SERVERS}
+      KAFKA_PASSWORD: ${KAFKA_PASSWORD}
+      EUREKA_SERVER_URL: http://service-registry:8761/eureka/
+      PRODUCT_SERVICE_PORT: 8081
+    depends_on:
+      - service-registry
 #      - kafka
     networks:
       - ecommerce_network
@@ -62,9 +74,13 @@ services:
     image: adelinv2/react-spring-ecommerce.user-service
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      DB_URL: ${USER_DB_URL}
-      DB_USERNAME: ${USER_DB_USERNAME}
-      DB_PASSWORD: ${USER_DB_PASSWORD}
+      USER_DB_URL: ${USER_DB_URL}
+      USER_DB_USERNAME: ${USER_DB_USERNAME}
+      USER_DB_PASSWORD: ${USER_DB_PASSWORD}
+      KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BOOTSTRAP_SERVERS}
+      KAFKA_PASSWORD: ${KAFKA_PASSWORD}
+      EUREKA_SERVER_URL: http://service-registry:8761/eureka/
+      USER_SERVICE_PORT: 8082
     depends_on:
 #      - kafka
       - service-registry
@@ -79,7 +95,12 @@ services:
       AZURE_STORAGE_ACCOUNT_NAME: ${AZURE_STORAGE_ACCOUNT_NAME}
       AZURE_STORAGE_ACCOUNT_KEY: ${AZURE_STORAGE_ACCOUNT_KEY}
       AZURE_STORAGE_CONNECTION_STRING: ${AZURE_STORAGE_CONNECTION_STRING}
-#    depends_on:
+      KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BOOTSTRAP_SERVERS}
+      KAFKA_PASSWORD: ${KAFKA_PASSWORD}
+      EUREKA_SERVER_URL: http://service-registry:8761/eureka/
+      IMAGE_SERVICE_PORT: 8083
+    depends_on:
+       - service-registry
 #      - kafka
     networks:
       - ecommerce_network
