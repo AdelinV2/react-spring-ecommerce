@@ -1,25 +1,52 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "../css/AddItemsPage.css";
 
 export default function AddItemsPage() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [specifications, setSpecifications] = useState([]);
   const [images, setImages] = useState([]);
   const [product, setProduct] = useState({
+    id: 0,
     sellerId: 0,
     name: "",
     category: "",
     description: "",
-    price: 0,
     oldPrice: 0,
+    price: 0,
     stock: 0,
     weight: 0,
     available: false,
-    images: images,
-    specifications: specifications,
+    images: [],
+    specifications: [],
   });
 
-  console.log(product);
+  useEffect(() => {
+    if (isSubmitting === true) {
+      console.log("Product state:", product);
+      const post = async () => {
+        try {
+          const response = await fetch("http://localhost:8000/api/product", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(product),
+          });
+
+          if (response.ok) {
+            const result = await response.json();
+            console.log("Product added successfully:", result);
+          }
+        } catch (error) {
+          console.error("Error adding product:", error);
+        } finally {
+          setIsSubmitting(false);
+        }
+      };
+      post();
+    }
+  }, [isSubmitting]);
 
   function addSpecification(e) {
     e.preventDefault();
@@ -38,16 +65,20 @@ export default function AddItemsPage() {
       };
 
       if (specs.length === 0) {
-        specs.push({ orderIndex: 0, title: specTitle, specs: [subSpec] });
+        specs.push({
+          orderIndex: 0,
+          title: specTitle,
+          subSpecifications: [subSpec],
+        });
       } else if (specs.length > 0) {
         if (specs.find((spec) => spec.title === specTitle)) {
           const index = specs.findIndex((spec) => spec.title === specTitle);
-          specs[index].specs.push(subSpec);
+          specs[index].subSpecifications.push(subSpec);
         } else {
           specs.push({
             orderIndex: specs.length,
             title: specTitle,
-            specs: [subSpec],
+            subSpecifications: [subSpec],
           });
         }
       }
@@ -72,6 +103,7 @@ export default function AddItemsPage() {
       formData.get("weight")
     ) {
       const newProduct = {
+        ...product,
         name: formData.get("name"),
         description: formData.get("description"),
         category: formData.get("category"),
@@ -83,46 +115,33 @@ export default function AddItemsPage() {
         specifications: specifications,
       };
       setProduct(newProduct);
+      setIsSubmitting(true);
     } else {
       alert("Please fill in all fields.");
-    }
-
-    try {
-      const response = await fetch("http://localhost:8000/api/product", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(product),
-      });
-
-      if (response.ok) {
-        const result = await response.json();
-        console.log("Product added successfully:", result);
-      }
-    } catch (error) {
-      console.error("Error adding product:", error);
     }
   }
 
   function handleImgChange(e) {
     const imgs = Array.from(e.target.files);
     const imgsObj = [];
+    let loadedCount = 0;
 
     imgs.forEach((img) => {
       const reader = new FileReader();
       reader.readAsDataURL(img);
       reader.onload = (e) => {
         imgsObj.push({
+          orderIndex: loadedCount,
           fileName: img.name,
-          data: e.target.result.split(",")[1],
+          data: e.target.result.split(",")[1], // Base64 data (remove header)
           fileType: img.type,
         });
-      };
 
-      if (imgsObj.length === imgs.length) {
-        setImages(imgsObj);
-      }
+        loadedCount++;
+        if (loadedCount === imgs.length) {
+          setImages(imgsObj); // Update state only after all images are loaded
+        }
+      };
     });
   }
 
@@ -218,7 +237,7 @@ export default function AddItemsPage() {
             return (
               <div className="specification">
                 <h3 key={spec.title}>{spec.title}</h3>
-                {spec.specs.map((subSpec, index) => {
+                {spec.subSpecifications.map((subSpec, index) => {
                   return (
                     <div key={index} className="sub-specification">
                       <h4>{subSpec.description}</h4>
