@@ -13,8 +13,6 @@ import java.util.List;
 @Builder
 public class SubSpecificationDto implements Serializable {
 
-    int id;
-    int specificationId;
     String description;
     String value;
     byte orderIndex;
@@ -22,7 +20,6 @@ public class SubSpecificationDto implements Serializable {
     public static SubSpecification toEntity(SubSpecificationDto subSpecificationDto) {
 
         return SubSpecification.builder()
-                .id(subSpecificationDto.getId())
                 .description(subSpecificationDto.getDescription())
                 .value(subSpecificationDto.getValue())
                 .orderIndex(subSpecificationDto.getOrderIndex())
@@ -32,7 +29,6 @@ public class SubSpecificationDto implements Serializable {
     public static SubSpecificationDto fromEntity(SubSpecification subSpecification) {
 
         return SubSpecificationDto.builder()
-                .id(subSpecification.getId())
                 .description(subSpecification.getDescription())
                 .value(subSpecification.getValue())
                 .orderIndex(subSpecification.getOrderIndex())

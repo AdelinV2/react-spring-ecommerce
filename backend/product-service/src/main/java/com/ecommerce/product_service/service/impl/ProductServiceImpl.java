@@ -32,7 +32,7 @@ public class ProductServiceImpl implements ProductService {
         for (ProductImageDto productImage : product.getImages()) {
 
             FileMessageDto message = FileMessageDto.builder()
-                    .productId(productImage.getProductId())
+                    .productId(newProduct.getId())
                     .orderIndex(productImage.getOrderIndex())
                     .fileName(productImage.getFileName())
                     .fileType(productImage.getFileType())

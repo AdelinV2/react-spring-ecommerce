@@ -15,7 +15,6 @@ import java.util.List;
 @Builder
 public class ProductDto implements Serializable {
 
-    int id;
     int sellerId;
     String name;
     String category;
@@ -28,28 +27,9 @@ public class ProductDto implements Serializable {
     List<ProductImageDto> images;
     List<SpecificationDto> specifications;
 
-    public static ProductDto fromEntity(com.ecommerce.product_service.entity.Product product) {
-
-        return ProductDto.builder()
-                .id(product.getId())
-                .sellerId(product.getSellerId())
-                .name(product.getName())
-                .category(product.getCategory())
-                .description(product.getDescription())
-                .price(product.getPrice())
-                .oldPrice(product.getOldPrice())
-                .stock(product.getStock())
-                .weight(product.getWeight())
-                .available(product.isAvailable())
-                .images(ProductImageDto.fromEntityList(product.getImages()))
-                .specifications(SpecificationDto.fromEntityList(product.getSpecifications()))
-                .build();
-    }
-
     public static Product toEntity(ProductDto productDto) {
 
         return Product.builder()
-                .id(productDto.getId())
                 .sellerId(productDto.getSellerId())
                 .name(productDto.getName())
                 .category(productDto.getCategory())
@@ -59,8 +39,6 @@ public class ProductDto implements Serializable {
                 .stock(productDto.getStock())
                 .weight(productDto.getWeight())
                 .available(productDto.isAvailable())
-                .images(ProductImageDto.toEntityList(productDto.getImages()))
-                .specifications(SpecificationDto.toEntityList(productDto.getSpecifications()))
                 .build();
     }
 }
