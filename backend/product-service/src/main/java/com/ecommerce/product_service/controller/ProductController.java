@@ -31,12 +31,12 @@ public class ProductController {
         return ResponseEntity.ok(product);
     }
 
-    @PostMapping
+    @PostMapping("api/product")
     public ResponseEntity<Product> createProduct(@RequestBody ProductDto product) throws IOException {
 
         productService.saveProduct(product);
 
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.CREATED).build(); 
     }
 
     @PutMapping

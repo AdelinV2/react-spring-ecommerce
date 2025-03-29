@@ -59,7 +59,7 @@ export default function AddItemsPage() {
     }
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     const formData = new FormData(e.target);
 
@@ -85,6 +85,23 @@ export default function AddItemsPage() {
       setProduct(newProduct);
     } else {
       alert("Please fill in all fields.");
+    }
+
+    try {
+      const response = await fetch("http://localhost:8000/api/product", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(product),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log("Product added successfully:", result);
+      }
+    } catch (error) {
+      console.error("Error adding product:", error);
     }
   }
 
