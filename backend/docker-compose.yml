@@ -2,22 +2,22 @@ version: "3.8"
 
 services:
 
-  kafka:
-    image: wurstmeister/kafka:latest
-    environment:
-      KAFKA_ADVERTISED_LISTENERS: INSIDE://${KAFKA_BOOTSTRAP_SERVERS}
-      KAFKA_LISTENER_SECURITY_PROTOCOL: PLAINTEXT
-      KAFKA_LISTENER_NAME_INSIDE: INSIDE
-      KAFKA_LISTENERS: INSIDE://0.0.0.0:9093
-      KAFKA_LISTENER_PORT: 9093
-      KAFKA_LISTENER_NAME: INSIDE
-      KAFKA_LISTENER_INTERNAL_PORT: 9093
-      KAFKA_PASSWORD: ${KAFKA_PASSWORD}
-    ports:
-      - "9093:9093"
-    networks:
-      - ecommerce_network
-    restart: always
+#  kafka:
+#    image: wurstmeister/kafka:latest
+#    environment:
+#      KAFKA_ADVERTISED_LISTENERS: INSIDE://${KAFKA_BOOTSTRAP_SERVERS}
+#      KAFKA_LISTENER_SECURITY_PROTOCOL: PLAINTEXT
+#      KAFKA_LISTENER_NAME_INSIDE: INSIDE
+#      KAFKA_LISTENERS: INSIDE://0.0.0.0:9093
+#      KAFKA_LISTENER_PORT: 9093
+#      KAFKA_LISTENER_NAME: INSIDE
+#      KAFKA_LISTENER_INTERNAL_PORT: 9093
+#      KAFKA_PASSWORD: ${KAFKA_PASSWORD}
+#    ports:
+#      - "9093:9093"
+#    networks:
+#      - ecommerce_network
+#    restart: always
 
   service-registry:
     image: adelinv2/react-spring-ecommerce.service-registry
@@ -28,8 +28,8 @@ services:
     networks:
       - ecommerce_network
     restart: always
-    depends_on:
-      - kafka
+#    depends_on:
+#      - kafka
 
   api-gateway:
     image: adelinv2/react-spring-ecommerce.api-gateway
@@ -40,7 +40,7 @@ services:
       - "8080:8080"
     depends_on:
       - service-registry
-      - kafka
+#      - kafka
     networks:
       - ecommerce_network
     restart: always
@@ -52,8 +52,8 @@ services:
       DB_URL: ${PRODUCT_DB_URL}
       DB_USERNAME: ${PRODUCT_DB_USERNAME}
       DB_PASSWORD: ${PRODUCT_DB_PASSWORD}
-    depends_on:
-      - kafka
+#    depends_on:
+#      - kafka
     networks:
       - ecommerce_network
     restart: always
@@ -66,7 +66,7 @@ services:
       DB_USERNAME: ${USER_DB_USERNAME}
       DB_PASSWORD: ${USER_DB_PASSWORD}
     depends_on:
-      - kafka
+#      - kafka
       - service-registry
     networks:
       - ecommerce_network
@@ -79,8 +79,8 @@ services:
       AZURE_STORAGE_ACCOUNT_NAME: ${AZURE_STORAGE_ACCOUNT_NAME}
       AZURE_STORAGE_ACCOUNT_KEY: ${AZURE_STORAGE_ACCOUNT_KEY}
       AZURE_STORAGE_CONNECTION_STRING: ${AZURE_STORAGE_CONNECTION_STRING}
-    depends_on:
-      - kafka
+#    depends_on:
+#      - kafka
     networks:
       - ecommerce_network
     restart: always
