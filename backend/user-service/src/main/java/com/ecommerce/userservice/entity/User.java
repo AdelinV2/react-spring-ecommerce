@@ -1,14 +1,12 @@
 package com.ecommerce.userservice.entity;
 
+import com.ecommerce.userservice.enums.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.Pattern;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -19,6 +17,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
+@Builder
 @Table(name = "users")
 public class User {
 
@@ -41,7 +40,7 @@ public class User {
     private String email;
 
     @Column(name = "role")
-    private String role;
+    private Role role;
 
     @CreationTimestamp
     @Column(name = "created_date")
