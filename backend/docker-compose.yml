@@ -1,16 +1,6 @@
 version: "3.8"
 
 services:
-  zookeeper:
-    image: wurstmeister/zookeeper:3.4.6
-    environment:
-      ZOOKEEPER_TICK_TIME: 2000
-      ZOOKEEPER_SYNC_LIMIT: 2
-    ports:
-      - "2181:2181"
-    networks:
-      - ecommerce_network
-    restart: always
 
   kafka:
     image: wurstmeister/kafka:latest
@@ -25,14 +15,12 @@ services:
       KAFKA_LISTENER_INTERNAL_PORT: 9093
     ports:
       - "9093:9093"
-    depends_on:
-      - zookeeper
     networks:
       - ecommerce_network
     restart: always
 
   service-registry:
-    image: adelinv2/react-spring-ecommerce.eureka-server
+    image: adelinv2/react-spring-ecommerce.service-registry
     environment:
       SPRING_PROFILES_ACTIVE: docker
     ports:
