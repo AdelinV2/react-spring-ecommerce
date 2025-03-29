@@ -21,29 +21,71 @@ export default function AddItemsPage() {
 
   console.log(product);
 
-  function updateSpecifications(category, spec) {
-    const specs = [...specifications];
-    const specItem = { category: category, specs: spec };
-    specs.push(specItem);
-    setSpecifications(specs);
+  function addSpecification(e) {
+    e.preventDefault();
+    const formData = new FormData(e.target.form);
+    const specTitle = formData.get("spec-title");
+    const specDesc = formData.get("spec-description");
+    const specValue = formData.get("spec-value");
+
+    if (specTitle && specDesc && specValue) {
+      const specs = [...specifications];
+      const subSpec = {
+        orderIndex:
+          specs.find((spec) => spec.title === specTitle)?.specs.length || 0,
+        description: specDesc,
+        value: specValue,
+      };
+
+      if (specs.length === 0) {
+        specs.push({ orderIndex: 0, title: specTitle, specs: [subSpec] });
+      } else if (specs.length > 0) {
+        if (specs.find((spec) => spec.title === specTitle)) {
+          const index = specs.findIndex((spec) => spec.title === specTitle);
+          specs[index].specs.push(subSpec);
+        } else {
+          specs.push({
+            orderIndex: specs.length,
+            title: specTitle,
+            specs: [subSpec],
+          });
+        }
+      }
+      setSpecifications(specs);
+
+      e.target.form.reset();
+    } else {
+      alert("Please fill in all fields.");
+    }
   }
 
   function handleSubmit(e) {
     e.preventDefault();
     const formData = new FormData(e.target);
-    updateSpecifications(formData.get("category"), formData.get("spec"));
-    const newProduct = {
-      name: formData.get("name"),
-      description: formData.get("description"),
-      category: formData.get("category"),
-      price: parseFloat(formData.get("price")),
-      stock: parseInt(formData.get("stock")),
-      weight: parseFloat(formData.get("weight")),
-      available: true,
-      images: images,
-      specifications: specifications,
-    };
-    setProduct(newProduct);
+
+    if (
+      formData.get("name") ||
+      formData.get("description") ||
+      formData.get("category") ||
+      formData.get("price") ||
+      formData.get("stock") ||
+      formData.get("weight")
+    ) {
+      const newProduct = {
+        name: formData.get("name"),
+        description: formData.get("description"),
+        category: formData.get("category"),
+        price: parseFloat(formData.get("price")),
+        stock: parseInt(formData.get("stock")),
+        weight: parseFloat(formData.get("weight")),
+        available: true,
+        images: images,
+        specifications: specifications,
+      };
+      setProduct(newProduct);
+    } else {
+      alert("Please fill in all fields.");
+    }
   }
 
   function handleImgChange(e) {
@@ -61,77 +103,117 @@ export default function AddItemsPage() {
         });
       };
 
-      setImages(imgsObj);
+      if (imgsObj.length === imgs.length) {
+        setImages(imgsObj);
+      }
     });
   }
 
   return (
     <>
       <Link to="/">Back</Link>
-      <form className="add-product-form" onSubmit={handleSubmit}>
-        <span className="form-label">Nume:</span>
-        <input
-          className="form-input"
-          type="text"
-          name="name"
-          placeholder="Parfum 200ml"
-        />
-        <span className="form-label">Descriere:</span>
-        <input
-          className="form-input"
-          type="text"
-          name="description"
-          placeholder="Parfum 200ml descriere"
-        />
-        <span className="form-label">Categorie:</span>
-        <input
-          className="form-input"
-          type="text"
-          name="category"
-          placeholder="Parfumuri"
-        />
-        <span className="form-label">Specificatii:</span>
-        <input
-          className="form-input"
-          type="text"
-          name="spec"
-          placeholder="Parfumuri"
-        />
-        <span className="form-label">Pret:</span>
-        <input
-          className="form-input"
-          type="number"
-          name="price"
-          step="0.01"
-          placeholder="399.99"
-        />
-        <span className="form-label">Stock:</span>
+      <div className="form-specs">
+        <form className="add-product-form" onSubmit={handleSubmit}>
+          <h3 className="form-label">Nume:</h3>
+          <input
+            className="form-input"
+            type="text"
+            name="name"
+            placeholder="Parfum 200ml"
+          />
+          <h3 className="form-label">Descriere:</h3>
+          <input
+            className="form-input"
+            type="text"
+            name="description"
+            placeholder="Parfum 200ml descriere"
+          />
+          <h3 className="form-label">Categorie:</h3>
+          <input
+            className="form-input"
+            type="text"
+            name="category"
+            placeholder="Parfumuri"
+          />
+          <h3 className="form-label">Titlu specificatie:</h3>
+          <input
+            className="form-input"
+            type="text"
+            name="spec-title"
+            placeholder="Aroma"
+          />
+          <h3 className="form-label">Specificatii:</h3>
+          <h5>Descriere:</h5>
+          <input
+            className="form-input"
+            type="text"
+            name="spec-description"
+            placeholder="Parfum floral"
+          />
+          <h5>Valoare:</h5>
 
-        <input
-          className="form-input"
-          type="number"
-          name="stock"
-          placeholder="30"
-        />
-        <span className="form-label">Greutate:</span>
+          <input
+            className="form-input"
+            type="text"
+            name="spec-value"
+            placeholder="Parfum floral"
+          />
+          <button className="form-btn" onClick={addSpecification}>
+            Add Spec
+          </button>
+          <h3 className="form-label">Pret:</h3>
+          <input
+            className="form-input"
+            type="number"
+            name="price"
+            step="0.01"
+            placeholder="399.99"
+          />
+          <h3 className="form-label">Stock:</h3>
 
-        <input
-          className="form-input"
-          type="number"
-          name="weight"
-          placeholder="5"
-        />
-        <input
-          type="file"
-          className="form-input"
-          name="img"
-          multiple
-          onChange={handleImgChange}
-        />
-        <button className="form-btn" type="submit">
-          Add Product
-        </button>
-      </form>
+          <input
+            className="form-input"
+            type="number"
+            name="stock"
+            placeholder="30"
+          />
+          <h3 className="form-label">Greutate:</h3>
+
+          <input
+            className="form-input"
+            type="number"
+            name="weight"
+            placeholder="5"
+          />
+          <input
+            type="file"
+            className="form-input"
+            name="img"
+            multiple
+            onChange={handleImgChange}
+          />
+          <button className="form-btn" type="submit">
+            Add Product
+          </button>
+        </form>
+        <div className="specifications-container">
+          {specifications.map((spec, index) => {
+            return (
+              <div className="specification">
+                <h3 key={spec.title}>{spec.title}</h3>
+                {spec.specs.map((subSpec, index) => {
+                  return (
+                    <div key={index} className="sub-specification">
+                      <h4>{subSpec.description}</h4>
+                      <p>{subSpec.value}</p>
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          })}
+        </div>
+      </div>
     </>
   );
 }
