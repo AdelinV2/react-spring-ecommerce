@@ -19,8 +19,9 @@ public class Seller {
     @Column(name = "id", nullable = false)
     private int id;
 
-    @Column(name = "user_id", nullable = false)
-    private int userId;
+    @OneToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @Column(name = "company_name")
     private String companyName;

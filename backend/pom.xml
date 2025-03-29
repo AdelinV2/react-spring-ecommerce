@@ -11,9 +11,10 @@
 
     <modules>
         <module>api-gateway</module>
-        <!--        <module>user-service</module>-->
+        <module>user-service</module>
         <module>product-service</module>
         <module>service-registry</module>
+        <module>image-service</module>
         <!--        <module>review-service</module>-->
         <!--        <module>cart-wishlist-service</module>-->
         <!--        <module>order-payment-service</module>-->
@@ -21,7 +22,6 @@
         <!--        <module>giftcard-service</module>-->
         <!--        <module>notification-service</module>-->
         <!--        <module>search-service</module>-->
-        <!--        <module>kafka-service</module>-->
     </modules>
 
     <properties>

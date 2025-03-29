@@ -20,8 +20,9 @@ public class Customer {
     @Column(name = "id", nullable = false)
     private int id;
 
-    @Column(name = "user_id", nullable = false)
-    private int userId;
+    @OneToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @Column(name = "first_name")
     @Size(min = 2, max = 30, message = "First name must be between 2 and 30 characters")
