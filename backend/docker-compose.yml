@@ -5,14 +5,14 @@ services:
   kafka:
     image: wurstmeister/kafka:latest
     environment:
-      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka:9093
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://${KAFKA_BOOTSTRAP_SERVERS}
       KAFKA_LISTENER_SECURITY_PROTOCOL: PLAINTEXT
       KAFKA_LISTENER_NAME_INSIDE: INSIDE
       KAFKA_LISTENERS: INSIDE://0.0.0.0:9093
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_LISTENER_PORT: 9093
       KAFKA_LISTENER_NAME: INSIDE
       KAFKA_LISTENER_INTERNAL_PORT: 9093
+      KAFKA_PASSWORD: ${KAFKA_PASSWORD}
     ports:
       - "9093:9093"
     networks:
@@ -86,5 +86,5 @@ services:
     restart: always
 
 networks:
-   ecommerce_network:
-     driver: bridge
+  ecommerce_network:
+    driver: bridge
