@@ -7,7 +7,6 @@ export default function AddItemsPage() {
   const [specifications, setSpecifications] = useState([]);
   const [images, setImages] = useState([]);
   const [product, setProduct] = useState({
-    id: 0,
     sellerId: 0,
     name: "",
     category: "",
@@ -23,6 +22,7 @@ export default function AddItemsPage() {
 
   useEffect(() => {
     if (isSubmitting === true) {
+      console.log("Submitting product:", JSON.stringify(product, null, 2));
       console.log("Product state:", product);
       const post = async () => {
         try {
@@ -33,11 +33,15 @@ export default function AddItemsPage() {
             },
             body: JSON.stringify(product),
           });
+          const text = await response.text();
+          console.log("Raw response:", text);
 
-          if (response.ok) {
-            const result = await response.json();
-            console.log("Product added successfully:", result);
+          if (!text) {
+            throw new Error("Empty response from server");
           }
+
+          const result = JSON.parse(text);
+          console.log("Parsed response:", result);
         } catch (error) {
           console.error("Error adding product:", error);
         } finally {
