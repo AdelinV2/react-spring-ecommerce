@@ -4,12 +4,13 @@ import lombok.*;
 
 import java.io.Serializable;
 
-@Value
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class ProductImageDto implements Serializable {
 
     int productId;
     byte orderIndex;
     String imageUrl;
-
 }

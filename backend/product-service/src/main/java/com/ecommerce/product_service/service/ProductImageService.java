@@ -1,5 +1,6 @@
 package com.ecommerce.product_service.service;
 
+import com.ecommerce.product_service.dto.ProductImageRecievedDto;
 import com.ecommerce.product_service.entity.ProductImage;
 
 import java.util.List;
@@ -11,7 +12,7 @@ public interface ProductImageService {
      *
      * @param productImage the product image to create
      */
-    void createProductImage(ProductImage productImage);
+    void createProductImage(ProductImageRecievedDto productImage);
 
     /**
      * Update a product image.

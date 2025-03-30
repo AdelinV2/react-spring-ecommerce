@@ -4,7 +4,9 @@ import lombok.*;
 
 import java.io.Serializable;
 
-@Value
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class ProductImageFileDto implements Serializable {
 

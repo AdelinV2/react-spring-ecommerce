@@ -1,8 +1,8 @@
 package com.ecommerce.imageservice.util;
 
 public enum ContainerName {
-    PRODUCT("product-images-container"),
-    PROFILE("profile-images-container");
+    PRODUCT("product-image-container"),
+    PROFILE("profile-image-container");
 
     private final String containerName;
 

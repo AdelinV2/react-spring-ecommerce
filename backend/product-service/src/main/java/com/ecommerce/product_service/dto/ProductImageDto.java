@@ -1,5 +1,6 @@
 package com.ecommerce.product_service.dto;
 
+import com.ecommerce.product_service.entity.ProductImage;
 import lombok.*;
 
 import java.io.Serializable;

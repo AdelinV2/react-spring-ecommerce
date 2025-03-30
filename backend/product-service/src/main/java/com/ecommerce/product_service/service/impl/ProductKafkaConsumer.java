@@ -1,6 +1,9 @@
 package com.ecommerce.product_service.service.impl;
 
+import com.ecommerce.product_service.dto.ProductImageDto;
+import com.ecommerce.product_service.dto.ProductImageRecievedDto;
 import com.ecommerce.product_service.entity.ProductImage;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -11,11 +14,16 @@ import org.springframework.stereotype.Service;
 public class ProductKafkaConsumer {
 
     private final ProductImageServiceImpl productImageService;
+    private final ObjectMapper objectMapper;
 
-    @KafkaListener(topics = "product-image-created-topic", groupId = "product-group")
-    public void consumeProductImage(ConsumerRecord<String, ProductImage> record) {
+    @KafkaListener(topics = "product-image-created-topic", groupId = "product-service")
+    public void consumeProductImage(String message) {
 
-        ProductImage productImage = record.value();
-        productImageService.createProductImage(productImage);
+        try {
+            ProductImageRecievedDto productImage = objectMapper.readValue(message, ProductImageRecievedDto.class);
+            productImageService.createProductImage(productImage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
