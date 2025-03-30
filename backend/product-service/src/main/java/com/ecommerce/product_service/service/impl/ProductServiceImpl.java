@@ -10,6 +10,7 @@ import com.ecommerce.product_service.repository.ProductRepository;
 import com.ecommerce.product_service.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
 import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
@@ -25,14 +26,12 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void saveProduct(ProductDto product) throws IOException {
 
-        Product newProduct = ProductDto.toEntity(product);
-
-        productRepository.save(newProduct);
+        Product savedProduct = productRepository.saveAndFlush(ProductDto.toEntity(product));
 
         for (ProductImageDto productImage : product.getImages()) {
 
             FileMessageDto message = FileMessageDto.builder()
-                    .productId(newProduct.getId())
+                    .productId(savedProduct.getId())
                     .orderIndex(productImage.getOrderIndex())
                     .fileName(productImage.getFileName())
                     .fileType(productImage.getFileType())
@@ -45,7 +44,7 @@ public class ProductServiceImpl implements ProductService {
         for (SpecificationDto specification : product.getSpecifications()) {
 
             Specification newSpecification = SpecificationDto.toEntity(specification);
-            newSpecification.setProduct(newProduct);
+            newSpecification.setProduct(savedProduct);
             specificationService.saveSpecification(newSpecification);
         }
     }

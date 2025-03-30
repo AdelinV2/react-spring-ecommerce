@@ -3,6 +3,7 @@ package com.ecommerce.product_service.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -19,7 +20,7 @@ public class Specification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
 
@@ -29,6 +30,7 @@ public class Specification {
     @Column(name = "order_index", nullable = false)
     private byte orderIndex;
 
-    @OneToMany(mappedBy = "specification", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<SubSpecification> subSpecifications;
+    @OneToMany(mappedBy = "specification", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<SubSpecification> subSpecifications = new ArrayList<>();
 }

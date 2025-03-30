@@ -30,11 +30,11 @@ public class SpecificationServiceImpl implements SpecificationService {
     public void saveSpecification(Specification specification) {
 
 
-        specificationRepository.save(specification);
+        Specification newSpecification = specificationRepository.save(specification);
 
         for (SubSpecification subSpecification : specification.getSubSpecifications()) {
 
-            subSpecification.setSpecification(specification);
+            subSpecification.setSpecification(newSpecification);
             subSpecificationService.saveSubSpecification(subSpecification);
         }
     }

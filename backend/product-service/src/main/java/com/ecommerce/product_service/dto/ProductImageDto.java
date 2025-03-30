@@ -7,10 +7,10 @@ import java.io.Serializable;
 /**
  * DTO for {@link com.ecommerce.product_service.entity.ProductImage}
  */
-@Value
-@Setter
-@Getter
+
+@Data
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
 public class ProductImageDto implements Serializable {
 

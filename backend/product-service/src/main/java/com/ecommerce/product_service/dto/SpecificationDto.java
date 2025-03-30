@@ -4,27 +4,33 @@ import com.ecommerce.product_service.entity.Specification;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * DTO for {@link com.ecommerce.product_service.entity.Specification}
  */
-@Value
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 @Builder
 public class SpecificationDto implements Serializable {
 
     String title;
     byte orderIndex;
-    List<SubSpecificationDto> subSpecifications;
+
+    @Builder.Default
+    List<SubSpecificationDto> subSpecifications = new ArrayList<>();
 
     public static Specification toEntity(SpecificationDto specificationDto) {
         return Specification.builder()
                 .title(specificationDto.getTitle())
                 .orderIndex(specificationDto.getOrderIndex())
+                .subSpecifications(SubSpecificationDto.toEntityList(specificationDto.getSubSpecifications()))
                 .build();
     }
 
-    public static SpecificationDto fromEntity(com.ecommerce.product_service.entity.Specification specification) {
+    public static SpecificationDto fromEntity(Specification specification) {
         return SpecificationDto.builder()
                 .title(specification.getTitle())
                 .orderIndex(specification.getOrderIndex())

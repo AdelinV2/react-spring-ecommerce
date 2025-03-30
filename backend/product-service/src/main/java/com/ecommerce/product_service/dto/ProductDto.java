@@ -5,14 +5,16 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * DTO for {@link com.ecommerce.product_service.entity.Product}
  */
-@JsonDeserialize(builder = ProductDto.ProductDtoBuilder.class)
-@Value
+@Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ProductDto implements Serializable {
 
     int sellerId;
@@ -24,8 +26,12 @@ public class ProductDto implements Serializable {
     int stock;
     double weight;
     boolean available;
-    List<ProductImageDto> images;
-    List<SpecificationDto> specifications;
+
+    @Builder.Default
+    List<ProductImageDto> images = new ArrayList<>();
+
+    @Builder.Default
+    List<SpecificationDto> specifications = new ArrayList<>();
 
     public static Product toEntity(ProductDto productDto) {
 
