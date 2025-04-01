@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service: [ service-registry, api-gateway, product-service, user-service, image-service ]
+        service: [ service-registry, api-gateway, product-service, user-service, image-service, review-service ]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -42,11 +42,14 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
+      - name: Generate tag name
+        id: tag_name
+        run: echo "TAG_NAME=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
+
       - name: Build and push Docker image for ${{ matrix.service }}
         run: |
           cd backend/${{ matrix.service }}
-          mvn compile jib:build -Dimage=adelinv2/react-spring-ecommerce.${{ matrix.service }}
-
+          mvn compile jib:build -Dimage=adelinv2/react-spring-ecommerce.${{ matrix.service }}:${{ env.TAG_NAME }}
 
 
 

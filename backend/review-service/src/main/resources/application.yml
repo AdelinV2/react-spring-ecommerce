@@ -1,0 +1,40 @@
+server:
+  port: ${SERVER_PORT:8084}
+
+spring:
+  application:
+    name: review-service
+
+  datasource:
+    url: ${REVIEW_DB_URL}
+    username: ${REVIEW_DB_USERNAME}
+    password: ${REVIEW_DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    producer:
+      retries: 3
+      acks: all
+    consumer:
+      group-id: review-service
+      auto-offset-reset: earliest
+    properties:
+      security.protocol: SASL_SSL
+      sasl.mechanism: PLAIN
+      sasl.jaas.config: "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"$ConnectionString\" password=\"${KAFKA_PASSWORD}\";"
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVER_URL:http://localhost:8761/eureka/}
+    register-with-eureka: true
+    fetch-registry: true
+
+  instance:
+    prefer-ip-address: true
