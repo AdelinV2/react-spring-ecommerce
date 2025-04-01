@@ -1,19 +1,44 @@
+.page
+{
+    max-width: 95vw;
+    max-height: 95vh;
+    display: flex;
+    flex-direction: column;
+    
+
+}
 .add-product-form
 {
-    margin-left: 20px;
-    margin-top: 30px;
+    overflow-y: auto;
+    margin: 20px;
+    padding: 30px;
     display: flex;
     flex-direction: column;
     gap: 15px;
+    border:solid 2px var(--grad-color-3);
+    border-radius: 10px;
+}
+.first-part,.second-part,.third-part
+{
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+    min-width: 300px; /* Prevents shrinking too much */
+    max-width: 50vw; /* Keeps it balanced */
+    
     
 }
 
-.form-input,.form-btn
+
+
+
+.form-input,.form-btn,.form-spec-btn
 {   
-border: solid black 1px;
+border: solid var(--grad-color-2) 1px;
     border-radius: 10px;
     padding: 15px 10px; 
-    width: fit-content;
+    box-sizing: border-box;
+    width: 100%;
 }
 
 .form-specs
@@ -28,3 +53,91 @@ border: solid black 1px;
     gap: 10px;
     margin-top: 30px;
 }
+
+.form-btn
+{
+    border: none;
+    background-color: var(--grad-color-3);
+    color: white;
+    cursor: pointer;
+    font-weight: 600;
+    margin-left: 20px;
+    margin-right: 20px;
+    font-size: 1.1rem;
+}
+
+.form-spec-btn
+{
+    border: solid 2px var(--grad-color-2);
+    background-color: transparent;
+    color: var(--grad-color-2);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1.1rem;
+
+
+}
+.form-label
+{
+    font-weight: 600;
+    color: var(--color);
+    font-size: 1.5rem;
+    text-decoration: underline;
+    
+
+}
+
+.sub-form-text
+{
+    font-size: 1.2rem;
+    color: var(--color);
+    font-weight: 500;
+}
+
+.go-back-btn
+{
+    background-color: var(--grad-color-3);
+    color: white;
+    border: none;
+    margin-top:10px;
+    margin-left:20px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    width: fit-content;
+    font-weight: 600;
+    font-size: 1.1rem;
+    text-decoration: none;
+    display: block;
+}
+
+.spec-title
+{
+    color: var(--color);
+    font-size: 1.5rem;
+    font-weight: 500;
+    text-decoration: underline;
+}
+.spec-subtitle,.spec-value
+{
+    color: var(--color-toned-down);
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+.subtitle-value-container
+{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+
+}
+
+/* FLEX GRID */
+
+.first-second-container
+{
+    display: flex;
+    gap: 40px;
+    
+}
+
