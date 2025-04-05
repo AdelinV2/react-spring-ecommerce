@@ -1,15 +1,18 @@
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import "../css/AddItemsPage.css";
+import categories from "../assets/CategorySubcategory.jsx";
 
 export default function AddItemsPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [specifications, setSpecifications] = useState([]);
+  const [category, setCategory] = useState("");
   const [images, setImages] = useState([]);
   const [product, setProduct] = useState({
     sellerId: 0,
     name: "",
     category: "",
+    subCategory: "",
     description: "",
     oldPrice: 0,
     price: 0,
@@ -111,11 +114,12 @@ export default function AddItemsPage() {
         ...product,
         name: formData.get("name"),
         description: formData.get("description"),
-        category: formData.get("category"),
+        category: category,
+        subCategory: formData.get("subcategory"),
         price: parseFloat(formData.get("price")),
         stock: parseInt(formData.get("stock")),
         weight: parseFloat(formData.get("weight")),
-        available: true,
+        available: false,
         images: images,
         specifications: specifications,
       };
@@ -150,6 +154,11 @@ export default function AddItemsPage() {
     });
   }
 
+  function handleCategoryChange(e) {
+    const selectedCategory = e.target.value;
+    setCategory(selectedCategory);
+  }
+
   return (
     <>
       <div className="page">
@@ -160,30 +169,36 @@ export default function AddItemsPage() {
           <form className="add-product-form" onSubmit={handleSubmit}>
             <div className="first-second-container">
               <div className="first-part">
-                <h3 className="form-label">Nume:</h3>
+                <h3 className="form-label">Product name:</h3>
                 <input
                   className="form-input"
                   type="text"
                   name="name"
                   placeholder="Parfum 200ml"
                 />
-                <h3 className="form-label">Descriere:</h3>
+                <h3 className="form-label">Description:</h3>
                 <input
                   className="form-input"
                   type="text"
                   name="description"
                   placeholder="Parfum 200ml descriere"
                 />
-                <h3 className="form-label">Categorie:</h3>
-                <input
-                  className="form-input"
-                  type="text"
+                <h3 className="form-label">Category:</h3>
+                <select
                   name="category"
-                  placeholder="Parfumuri"
-                />
+                  className="form-input select-input"
+                  onChange={handleCategoryChange}
+                >
+                  <option value="">Select Category</option>
+                  {categories.map((cat, index) => (
+                    <option className="option" key={index} value={cat.category}>
+                      {cat.category}
+                    </option>
+                  ))}
+                </select>
               </div>
               <div className="third-part">
-                <h3 className="form-label">Pret:</h3>
+                <h3 className="form-label">Price:</h3>
                 <input
                   className="form-input form-number"
                   type="number"
@@ -199,7 +214,7 @@ export default function AddItemsPage() {
                   name="stock"
                   placeholder="30"
                 />
-                <h3 className="form-label">Greutate:</h3>
+                <h3 className="form-label">Weight:</h3>
 
                 <input
                   className="form-input form-number"
@@ -210,7 +225,7 @@ export default function AddItemsPage() {
               </div>
               <div className="second-part">
                 <div className="specificatie-container">
-                  <h5 className="form-label-inner">Specificatie:</h5>
+                  <h5 className="form-label-inner">Specifications:</h5>
                   <input
                     className="form-input"
                     type="text"
@@ -219,7 +234,7 @@ export default function AddItemsPage() {
                   />
                 </div>
                 <div className="subspec-container">
-                  <h5 className="form-label-inner">Sub specificatie:</h5>
+                  <h5 className="form-label-inner">Sub-specification:</h5>
 
                   <input
                     className="form-input"
@@ -265,19 +280,45 @@ export default function AddItemsPage() {
                 </div>
               ) : null}
             </div>
-            <h3 className="form-label">Imagini:</h3>
-            <input
-              type="file"
-              className="form-input form-input-file"
-              name="img"
-              multiple
-              onChange={handleImgChange}
-            />
+            <div className="subcat-img-container">
+              <div className="subcategory-container">
+                <h3 className="form-label">Subcategory:</h3>
+                <select
+                  name="subcategory"
+                  className="form-input select-input"
+                  disabled={!category}
+                >
+                  <option value="">Select Subcategory</option>
+                  {categories
+                    .find((cat) => cat.category === category)
+                    ?.subcategories.map((subcategory, index) => (
+                      <option
+                        className="option"
+                        key={index}
+                        value={subcategory}
+                      >
+                        {subcategory}
+                      </option>
+                    ))}
+                </select>
+              </div>
+              <div className="images-container">
+                <h3 className="form-label">Images:</h3>
+                <input
+                  type="file"
+                  className="form-input form-input-file"
+                  name="img"
+                  multiple
+                  onChange={handleImgChange}
+                />
+              </div>
+            </div>
+            <div className="btn-container">
+              <button className="form-btn" type="submit">
+                Add Product
+              </button>
+            </div>
           </form>
-
-          <button className="form-btn" type="submit">
-            Add Product
-          </button>
         </div>
       </div>
     </>
