@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
 import "../css/AddItemsPage.css";
 import categories from "../assets/CategorySubcategory.jsx";
 
