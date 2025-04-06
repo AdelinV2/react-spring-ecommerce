@@ -1,7 +1,6 @@
 package com.ecommerce.product_service.dto;
 
 import com.ecommerce.product_service.entity.Product;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;
 
 import java.io.Serializable;
@@ -20,6 +19,7 @@ public class ProductDto implements Serializable {
     int sellerId;
     String name;
     String category;
+    String subCategory;
     String description;
     double price;
     double oldPrice;
@@ -39,6 +39,7 @@ public class ProductDto implements Serializable {
                 .sellerId(productDto.getSellerId())
                 .name(productDto.getName())
                 .category(productDto.getCategory())
+                .subCategory(productDto.getSubCategory())
                 .description(productDto.getDescription())
                 .price(productDto.getPrice())
                 .oldPrice(productDto.getOldPrice())

@@ -1,9 +1,7 @@
 package com.ecommerce.product_service.service.impl;
 
-import com.ecommerce.product_service.dto.FileMessageDto;
-import com.ecommerce.product_service.dto.ProductDto;
-import com.ecommerce.product_service.dto.ProductImageDto;
-import com.ecommerce.product_service.dto.SpecificationDto;
+import com.ecommerce.product_service.client.ReviewClient;
+import com.ecommerce.product_service.dto.*;
 import com.ecommerce.product_service.entity.Product;
 import com.ecommerce.product_service.entity.Specification;
 import com.ecommerce.product_service.repository.ProductRepository;
@@ -22,6 +20,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final SpecificationServiceImpl specificationService;
     private final ProductKafkaProducer kafkaProducer;
+    private final ReviewClient reviewClient;
 
     @Override
     public void saveProduct(ProductDto product) throws IOException {
@@ -75,5 +74,29 @@ public class ProductServiceImpl implements ProductService {
     public List<Product> getProductsByGeneralName(String name) {
 
         return productRepository.findByNameContaining(name);
+    }
+
+    @Override
+    public List<ProductCardDto> getProductCardsByCategories(List<String> categories) {
+
+        List<Product> products = productRepository.findByCategoryIn(categories);
+
+        return products.stream().map(product -> {
+
+            AverageReviewDto avg = reviewClient.getProductAverage(product.getId());
+
+            return  ProductCardDto.builder()
+                    .id(product.getId())
+                    .name(product.getName())
+                    .category(product.getCategory())
+                    .subCategory(product.getSubCategory())
+                    .price(product.getPrice())
+                    .oldPrice(product.getOldPrice())
+                    .stock(product.getStock())
+                    .reviewScore(avg.getAverage())
+                    .reviewCount(avg.getCount())
+                    .imageUrl(product.getImages().isEmpty() ? null : product.getImages().get(0).getImageUrl())
+                    .build();
+        }).toList();
     }
 }

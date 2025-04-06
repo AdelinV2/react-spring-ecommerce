@@ -1,5 +1,6 @@
 package com.ecommerce.product_service.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,8 +18,9 @@ public class SubSpecification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "specification_id")
+    @JsonIgnore
     private Specification specification;
 
     @Column(name = "description", nullable = false)

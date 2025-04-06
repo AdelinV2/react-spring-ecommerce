@@ -1,8 +1,8 @@
 package com.ecommerce.product_service.controller;
 
+import com.ecommerce.product_service.dto.ProductCardDto;
 import com.ecommerce.product_service.dto.ProductDto;
 import com.ecommerce.product_service.entity.Product;
-import com.ecommerce.product_service.service.impl.ProductImageServiceImpl;
 import com.ecommerce.product_service.service.impl.ProductServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 
 @RestController
@@ -29,6 +30,18 @@ public class ProductController {
         }
 
         return ResponseEntity.ok(product);
+    }
+
+    @PostMapping("/card-categories")
+    public ResponseEntity<List<ProductCardDto>> getProductCardsByCategories(@RequestBody List<String> categories) {
+
+        List<ProductCardDto> productCards = productService.getProductCardsByCategories(categories);
+
+        if (productCards.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(productCards);
     }
 
     @PostMapping

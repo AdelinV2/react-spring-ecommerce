@@ -1,5 +1,6 @@
 package com.ecommerce.product_service.service;
 
+import com.ecommerce.product_service.dto.ProductCardDto;
 import com.ecommerce.product_service.dto.ProductDto;
 import com.ecommerce.product_service.entity.Product;
 
@@ -46,4 +47,6 @@ public interface ProductService {
      * @return the list of products
      */
     List<Product> getProductsByGeneralName(String name);
+
+    List<ProductCardDto> getProductCardsByCategories(List<String> categories);
 }

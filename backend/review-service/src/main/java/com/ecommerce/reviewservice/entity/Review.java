@@ -28,7 +28,6 @@ public class Review {
     private int userId;
 
     @Column(name = "rating", nullable = false)
-    @Size(min = 1, max = 5, message = "Rating must be between 1 and 5")
     private byte rating;
 
     @Column(name = "message")

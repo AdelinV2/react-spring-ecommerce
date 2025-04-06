@@ -4,7 +4,6 @@ import com.ecommerce.product_service.listener.ProductEntityListener;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
@@ -35,6 +34,9 @@ public class Product {
     @Column(name = "category")
     private String category;
 
+    @Column(name = "sub_category")
+    private String subCategory;
+
     @Column(name = "description")
     private String description;
 
@@ -61,11 +63,13 @@ public class Product {
     @Column(name = "available")
     private boolean available;
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("orderIndex ASC")
     @Builder.Default
     private List<ProductImage> images = new ArrayList<>();
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("orderIndex ASC")
     @Builder.Default
     private List<Specification> specifications = new ArrayList<>();
 
