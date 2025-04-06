@@ -63,7 +63,8 @@ export default function AddItemsPage() {
       const specs = [...specifications];
       const subSpec = {
         orderIndex:
-          specs.find((spec) => spec.title === specTitle)?.specs.length || 0,
+          specs.find((spec) => spec.title === specTitle)?.subSpecifications
+            .length || 0,
         description: specDesc,
         value: specValue,
       };
@@ -87,8 +88,8 @@ export default function AddItemsPage() {
         }
       }
       setSpecifications(specs);
-
-      e.target.form.reset();
+      e.target.form.querySelector('input[name="spec-description"]').value = "";
+      e.target.form.querySelector('input[name="spec-value"]').value = "";
     } else {
       alert("Please fill in all fields.");
     }
@@ -151,107 +152,132 @@ export default function AddItemsPage() {
 
   return (
     <>
-      <Link to="/">Back</Link>
-      <div className="form-specs">
-        <form className="add-product-form" onSubmit={handleSubmit}>
-          <h3 className="form-label">Nume:</h3>
-          <input
-            className="form-input"
-            type="text"
-            name="name"
-            placeholder="Parfum 200ml"
-          />
-          <h3 className="form-label">Descriere:</h3>
-          <input
-            className="form-input"
-            type="text"
-            name="description"
-            placeholder="Parfum 200ml descriere"
-          />
-          <h3 className="form-label">Categorie:</h3>
-          <input
-            className="form-input"
-            type="text"
-            name="category"
-            placeholder="Parfumuri"
-          />
-          <h3 className="form-label">Titlu specificatie:</h3>
-          <input
-            className="form-input"
-            type="text"
-            name="spec-title"
-            placeholder="Aroma"
-          />
-          <h3 className="form-label">Specificatii:</h3>
-          <h5>Descriere:</h5>
-          <input
-            className="form-input"
-            type="text"
-            name="spec-description"
-            placeholder="Parfum floral"
-          />
-          <h5>Valoare:</h5>
+      <div className="page">
+        <Link className="go-back-btn" to="/">
+          X
+        </Link>
+        <div className="form-btn-container">
+          <form className="add-product-form" onSubmit={handleSubmit}>
+            <div className="first-second-container">
+              <div className="first-part">
+                <h3 className="form-label">Nume:</h3>
+                <input
+                  className="form-input"
+                  type="text"
+                  name="name"
+                  placeholder="Parfum 200ml"
+                />
+                <h3 className="form-label">Descriere:</h3>
+                <input
+                  className="form-input"
+                  type="text"
+                  name="description"
+                  placeholder="Parfum 200ml descriere"
+                />
+                <h3 className="form-label">Categorie:</h3>
+                <input
+                  className="form-input"
+                  type="text"
+                  name="category"
+                  placeholder="Parfumuri"
+                />
+              </div>
+              <div className="third-part">
+                <h3 className="form-label">Pret:</h3>
+                <input
+                  className="form-input form-number"
+                  type="number"
+                  name="price"
+                  step="0.01"
+                  placeholder="399.99"
+                />
+                <h3 className="form-label">Stock:</h3>
 
-          <input
-            className="form-input"
-            type="text"
-            name="spec-value"
-            placeholder="Parfum floral"
-          />
-          <button className="form-btn" onClick={addSpecification}>
-            Add Spec
-          </button>
-          <h3 className="form-label">Pret:</h3>
-          <input
-            className="form-input"
-            type="number"
-            name="price"
-            step="0.01"
-            placeholder="399.99"
-          />
-          <h3 className="form-label">Stock:</h3>
+                <input
+                  className="form-input form-number"
+                  type="number"
+                  name="stock"
+                  placeholder="30"
+                />
+                <h3 className="form-label">Greutate:</h3>
 
-          <input
-            className="form-input"
-            type="number"
-            name="stock"
-            placeholder="30"
-          />
-          <h3 className="form-label">Greutate:</h3>
+                <input
+                  className="form-input form-number"
+                  type="number"
+                  name="weight"
+                  placeholder="5"
+                />
+              </div>
+              <div className="second-part">
+                <div className="specificatie-container">
+                  <h5 className="form-label-inner">Specificatie:</h5>
+                  <input
+                    className="form-input"
+                    type="text"
+                    name="spec-title"
+                    placeholder="Specificatie"
+                  />
+                </div>
+                <div className="subspec-container">
+                  <h5 className="form-label-inner">Sub specificatie:</h5>
 
-          <input
-            className="form-input"
-            type="number"
-            name="weight"
-            placeholder="5"
-          />
-          <input
-            type="file"
-            className="form-input"
-            name="img"
-            multiple
-            onChange={handleImgChange}
-          />
+                  <input
+                    className="form-input"
+                    type="text"
+                    name="spec-description"
+                    placeholder="Sub specificatie"
+                  />
+
+                  <input
+                    className="form-input"
+                    type="text"
+                    name="spec-value"
+                    placeholder="Valoare"
+                  />
+                  <button className="form-spec-btn" onClick={addSpecification}>
+                    Add Spec
+                  </button>
+                </div>
+              </div>
+              {specifications.length > 0 ? (
+                <div className="specifications-container">
+                  {specifications.map((spec, index) => {
+                    return (
+                      <div className="specification">
+                        <h3 className="spec-title" key={spec.title}>
+                          {spec.title}
+                        </h3>
+                        {spec.subSpecifications.map((subSpec, index) => {
+                          return (
+                            <div key={index} className="sub-specification">
+                              <div className="subtitle-value-container">
+                                <h4 className="spec-subtitle">
+                                  {subSpec.description}:
+                                </h4>
+                                <p className="spec-value">{subSpec.value}</p>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : null}
+            </div>
+            <h3 className="form-label">Imagini:</h3>
+            <input
+              type="file"
+              className="form-input form-input-file"
+              name="img"
+              multiple
+              onChange={handleImgChange}
+            />
+          </form>
+
           <button className="form-btn" type="submit">
             Add Product
           </button>
-        </form>
-        <div className="specifications-container">
-          {specifications.map((spec, index) => {
-            return (
-              <div className="specification">
-                <h3 key={spec.title}>{spec.title}</h3>
-                {spec.subSpecifications.map((subSpec, index) => {
-                  return (
-                    <div key={index} className="sub-specification">
-                      <h4>{subSpec.description}</h4>
-                      <p>{subSpec.value}</p>
-                    </div>
-                  );
-                })}
-              </div>
-            );
-          })}
         </div>
       </div>
     </>

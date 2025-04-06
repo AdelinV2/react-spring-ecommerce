@@ -1,30 +1,169 @@
-.add-product-form
-{
-    margin-left: 20px;
-    margin-top: 30px;
+/* General Page Styling */
+.page {
+    overflow: hidden;
+    max-width: 100%;
+    height: 100vh;
+}
+
+/* Form Container */
+.form-btn-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.add-product-form {
+    overflow-y: auto;
+    padding: 30px;
     display: flex;
     flex-direction: column;
     gap: 15px;
-    
-}
-
-.form-input,.form-btn
-{   
-border: solid black 1px;
+    border: 2px solid var(--grad-color-3);
     border-radius: 10px;
-    padding: 15px 10px; 
-    width: fit-content;
 }
 
-.form-specs
-{
+/* Form Sections */
+.first-part, .second-part, .third-part {
     display: flex;
+    flex-direction: column;
     gap: 20px;
 }
-.specifications-container
+
+.second-part
+{
+    justify-content: space-between;
+}
+
+.second-part-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: space-between;
+}
+
+.third-part {
+    margin-right: 120px;
+}
+
+/* Form Inputs */
+.form-input, .form-spec-btn {
+    border: 1px solid var(--grad-color-3);
+    border-radius: 10px;
+    padding: 15px 10px;
+    box-sizing: border-box;
+    width: 300px;
+}
+
+.form-input-file {
+    width: 440px;
+}
+
+.form-number {
+    width: 100px;
+}
+
+/* Specifications */
+.specificatie-container,.subspec-container
 {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    
+}
+
+
+
+.specifications-container {
+    width: 300px;
+    max-height: 300px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
     margin-top: 30px;
+}
+
+/* Buttons */
+.form-btn {
+    width: 500px;
+    border: none;
+    border-radius: 10px;
+    padding: 15px 10px;
+    background-color: var(--grad-color-3);
+    color: white;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.form-spec-btn {
+    border: 2px solid var(--grad-color-3);
+    background-color: transparent;
+    color: var(--grad-color-3);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.go-back-btn {
+    background-color: var(--grad-color-3);
+    color: white;
+    border: none;
+    margin: 10px 20px;
+    padding: 10px 17px;
+    border-radius: 500px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1.1rem;
+    text-decoration: none;
+    display: block;
+    width: fit-content;
+}
+
+/* Text Styling */
+.form-label, .spec-title {
+    font-weight: 600;
+    color: var(--color-toned-down);
+    font-size: 1.2rem;
+}
+
+
+.form-label-inner
+{
+    font-weight: 500;
+    color: var(--color-toned-down);
+    font-size: 1.2rem;
+}
+
+.spec-title{
+    text-transform: uppercase;
+    color: var(--grad-color-3);
+}
+.sub-form-text {
+    font-size: 1.2rem;
+    color: var(--color);
+    font-weight: 500;
+}
+
+.spec-subtitle, .spec-value {
+    color: var(--color-toned-down);
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.subtitle-value-container {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+/* Layout */
+.first-second-container {
+    max-height: 350px;
+    margin-bottom: 20px;
+    display: flex;
+    gap: 40px;
 }
