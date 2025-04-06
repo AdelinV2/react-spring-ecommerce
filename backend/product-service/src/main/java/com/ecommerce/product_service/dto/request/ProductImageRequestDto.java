@@ -1,6 +1,5 @@
-package com.ecommerce.product_service.dto;
+package com.ecommerce.product_service.dto.request;
 
-import com.ecommerce.product_service.entity.ProductImage;
 import lombok.*;
 
 import java.io.Serializable;
@@ -13,7 +12,7 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductImageDto implements Serializable {
+public class ProductImageRequestDto implements Serializable {
 
     byte orderIndex;
     String fileName;

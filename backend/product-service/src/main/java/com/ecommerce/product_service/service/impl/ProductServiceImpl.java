@@ -2,6 +2,10 @@ package com.ecommerce.product_service.service.impl;
 
 import com.ecommerce.product_service.client.ReviewClient;
 import com.ecommerce.product_service.dto.*;
+import com.ecommerce.product_service.dto.request.ProductImageRequestDto;
+import com.ecommerce.product_service.dto.request.ProductRequestDto;
+import com.ecommerce.product_service.dto.request.SpecificationRequestDto;
+import com.ecommerce.product_service.dto.response.ProductResponseDto;
 import com.ecommerce.product_service.entity.Product;
 import com.ecommerce.product_service.entity.Specification;
 import com.ecommerce.product_service.repository.ProductRepository;
@@ -10,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.Base64;
 import java.util.List;
 
 @Service
@@ -23,11 +26,11 @@ public class ProductServiceImpl implements ProductService {
     private final ReviewClient reviewClient;
 
     @Override
-    public void saveProduct(ProductDto product) throws IOException {
+    public void saveProduct(ProductRequestDto product) throws IOException {
 
-        Product savedProduct = productRepository.saveAndFlush(ProductDto.toEntity(product));
+        Product savedProduct = productRepository.saveAndFlush(ProductRequestDto.toEntity(product));
 
-        for (ProductImageDto productImage : product.getImages()) {
+        for (ProductImageRequestDto productImage : product.getImages()) {
 
             FileMessageDto message = FileMessageDto.builder()
                     .productId(savedProduct.getId())
@@ -40,9 +43,9 @@ public class ProductServiceImpl implements ProductService {
             kafkaProducer.sendImageMessage(message);
         }
 
-        for (SpecificationDto specification : product.getSpecifications()) {
+        for (SpecificationRequestDto specification : product.getSpecifications()) {
 
-            Specification newSpecification = SpecificationDto.toEntity(specification);
+            Specification newSpecification = SpecificationRequestDto.toEntity(specification);
             newSpecification.setProduct(savedProduct);
             specificationService.saveSpecification(newSpecification);
         }
@@ -81,6 +84,18 @@ public class ProductServiceImpl implements ProductService {
 
         List<Product> products = productRepository.findByCategoryIn(categories);
 
+        return getProductCardDtos(products);
+    }
+
+    @Override
+    public List<ProductCardDto> getProductCardBySubCategories(List<String> subCategories) {
+
+     List<Product> products = productRepository.findBySubCategoryIn(subCategories);
+
+        return getProductCardDtos(products);
+    }
+
+    private List<ProductCardDto> getProductCardDtos(List<Product> products) {
         return products.stream().map(product -> {
 
             AverageReviewDto avg = reviewClient.getProductAverage(product.getId());
@@ -98,5 +113,23 @@ public class ProductServiceImpl implements ProductService {
                     .imageUrl(product.getImages().isEmpty() ? null : product.getImages().get(0).getImageUrl())
                     .build();
         }).toList();
+    }
+
+    @Override
+    public ProductResponseDto getProductResponseById(int id) {
+
+        Product product = getProductById(id);
+
+        if (product == null) {
+            return null;
+        }
+
+        ProductResponseDto productResponseDto = ProductResponseDto.fromEntity(product);
+
+        AverageReviewDto avg = reviewClient.getProductAverage(product.getId());
+        productResponseDto.setReviewScore(avg.getAverage());
+        productResponseDto.setReviewCount(avg.getCount());
+
+        return productResponseDto;
     }
 }

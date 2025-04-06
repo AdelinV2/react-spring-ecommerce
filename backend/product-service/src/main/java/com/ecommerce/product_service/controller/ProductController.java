@@ -1,7 +1,8 @@
 package com.ecommerce.product_service.controller;
 
 import com.ecommerce.product_service.dto.ProductCardDto;
-import com.ecommerce.product_service.dto.ProductDto;
+import com.ecommerce.product_service.dto.request.ProductRequestDto;
+import com.ecommerce.product_service.dto.response.ProductResponseDto;
 import com.ecommerce.product_service.entity.Product;
 import com.ecommerce.product_service.service.impl.ProductServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -21,9 +22,9 @@ public class ProductController {
     private final ProductServiceImpl productService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable("id") int id) {
+    public ResponseEntity<ProductResponseDto> getProductById(@PathVariable("id") int id) {
 
-        Product product = productService.getProductById(id);
+        ProductResponseDto product = productService.getProductResponseById(id);
 
         if (product == null) {
             return ResponseEntity.notFound().build();
@@ -45,7 +46,7 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<Product> createProduct(@RequestBody ProductDto product) throws IOException {
+    public ResponseEntity<Product> createProduct(@RequestBody ProductRequestDto product) throws IOException {
 
         productService.saveProduct(product);
 
@@ -53,7 +54,7 @@ public class ProductController {
     }
 
     @PutMapping
-    public ResponseEntity<Product> updateProduct(@RequestBody ProductDto product) throws IOException {
+    public ResponseEntity<Product> updateProduct(@RequestBody ProductRequestDto product) throws IOException {
 
         productService.saveProduct(product);
 

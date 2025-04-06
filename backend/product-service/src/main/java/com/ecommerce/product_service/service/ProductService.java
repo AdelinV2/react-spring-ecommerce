@@ -1,7 +1,8 @@
 package com.ecommerce.product_service.service;
 
 import com.ecommerce.product_service.dto.ProductCardDto;
-import com.ecommerce.product_service.dto.ProductDto;
+import com.ecommerce.product_service.dto.request.ProductRequestDto;
+import com.ecommerce.product_service.dto.response.ProductResponseDto;
 import com.ecommerce.product_service.entity.Product;
 
 import java.io.IOException;
@@ -17,7 +18,7 @@ public interface ProductService {
      *
      * @param product the product to save
      */
-    void saveProduct(ProductDto product) throws IOException;
+    void saveProduct(ProductRequestDto product) throws IOException;
 
     /**
      * Delete a product.
@@ -48,5 +49,25 @@ public interface ProductService {
      */
     List<Product> getProductsByGeneralName(String name);
 
+    /**
+     * Get all products by a category.
+     *
+     * @return the list of products
+     */
     List<ProductCardDto> getProductCardsByCategories(List<String> categories);
+
+    /**
+     * Get all products by a subcategory.
+     *
+     * @return the list of products
+     */
+    List<ProductCardDto> getProductCardBySubCategories(List<String > subCategories);
+
+    /**
+     * Get a product by its ID.
+     *
+     * @param id the ID of the product
+     * @return the product response DTO
+     */
+    ProductResponseDto getProductResponseById(int id);
 }
