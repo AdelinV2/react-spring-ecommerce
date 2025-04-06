@@ -1,0 +1,76 @@
+/* LAYOUT */
+.product-carousel-container
+{
+    margin:30px auto;
+    max-width   : 100vw;
+   
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+}
+
+.products-container
+{
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    
+}
+
+.dots
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 15px 0;
+}
+
+/* FORMAT TEXT */
+
+.carousel-title
+{
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-left:30px;
+    color: var(--color-toned-down);
+    text-transform: capitalize;
+}
+
+/* STYLE */
+.arrow-left,.arrow-right
+{
+    stroke: white;
+    width: 30px;
+    height: 30px;
+    stroke-width: 2.2;
+    background-color: var(--grad-color-3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 5px;
+}
+
+/* DOTS */
+
+.dot
+{
+    width: 10px;
+    height: 10px;
+    background-color: var(--color-toned-down);
+    border-radius: 50%;
+    display: inline-block;
+    margin: 0 5px;
+    cursor: pointer;
+}
+.active-dot
+{
+    background-color: var(--grad-color-3);
+}

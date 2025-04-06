@@ -56,7 +56,7 @@
     
     overflow: hidden;
     position: relative;
-    margin: 50px;
+    
     border-radius: 20px;
     box-shadow: 3px 3px 3px var(--grad-color-3),-3px -3px 3px var(--grad-color-1);
     height: 300px;
