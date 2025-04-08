@@ -41,7 +41,7 @@ spring:
 keycloak:
   auth-server-url: ${AUTH_SERVER_URL:http://localhost:8080/realms/ecommerce}
   realm: ${KEYCLOAK_REALM:ecommerce}
-  resource: ${KEYCLOAK_CLIENT_ID:product-service}
+  resource: ${PRODUCT-SERVICE-KEYCLOAK_CLIENT_ID:product-service}
   public-client: false
   credentials:
     secret: ${PRODUCT_SERVICE_KEYCLOAK_SECRET}

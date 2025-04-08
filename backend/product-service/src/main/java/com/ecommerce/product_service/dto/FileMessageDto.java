@@ -5,7 +5,7 @@ import lombok.*;
 import java.io.Serializable;
 
 @Value
-@Builder
+@Builder(toBuilder = true)
 public class FileMessageDto implements Serializable {
 
     int productId;
@@ -14,6 +14,9 @@ public class FileMessageDto implements Serializable {
     String fileType;
     String data;
 
+    @With
+    String authToken;
+
     @Override
     public String toString() {
         return "{" +
@@ -21,7 +24,8 @@ public class FileMessageDto implements Serializable {
                 "\"orderIndex\": " + orderIndex + "," +
                 "\"fileName\": \"" + fileName + "\"," +
                 "\"fileType\": \"" + fileType + "\"," +
-                "\"data\": \"" + data + "\"" +
+                "\"data\": \"" + data + "\"," +
+                "\"authToken\": \"" + authToken + "\"" +
                 "}";
     }
 }

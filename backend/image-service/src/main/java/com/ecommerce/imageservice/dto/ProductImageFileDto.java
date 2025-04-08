@@ -7,7 +7,7 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@Builder(toBuilder = true)
 public class ProductImageFileDto implements Serializable {
 
     int productId;
@@ -15,4 +15,6 @@ public class ProductImageFileDto implements Serializable {
     String fileName;
     String fileType;
     String data;
+    @With
+    String authToken;
 }
