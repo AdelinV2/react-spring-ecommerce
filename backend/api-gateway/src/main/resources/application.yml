@@ -15,19 +15,31 @@ spring:
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:
-              - Path=/api/user/**
+            - Path=/api/user/**
 
         - id: image-service
           uri: lb://IMAGE-SERVICE
           predicates:
-              - Path=/api/image/**
+            - Path=/api/image/**
 
-#        - id: discovery-server
-#          uri: https://veldara-service-registry.azuremicroservices.io
-#          predicates:
-#            - Path=/eureka/**
-#          filters:
-#            - SetPath=/
+        - id: review-service
+          uri: lb://REVIEW-SERVICE
+          predicates:
+            - Path=/api/review/**
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${OIDC_ISSUER_URI:http://localhost:8080/realms/ecommerce}
+
+keycloak:
+  auth-server-url: ${AUTH_SERVER_URL:http://localhost:8080/auth}
+  realm: ${KEYCLOAK_REALM:ecommerce}
+  resource: ${KEYCLOAK_CLIENT_ID:product-service}
+  public-client: false
+  credentials:
+    secret: ${PRODUCT_SERVICE_KEYCLOAK_SECRET}
 
 eureka:
   client:

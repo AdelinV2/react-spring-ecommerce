@@ -32,6 +32,21 @@ spring:
       sasl.mechanism: PLAIN
       sasl.jaas.config: "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"$ConnectionString\" password=\"${KAFKA_PASSWORD}\";"
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${OIDC_ISSUER_URI:http://localhost:8080/realms/ecommerce}
+
+keycloak:
+  auth-server-url: ${AUTH_SERVER_URL:http://localhost:8080/auth}
+  realm: ${KEYCLOAK_REALM:ecommerce}
+  resource: ${KEYCLOAK_CLIENT_ID:product-service}
+  public-client: false
+  credentials:
+    secret: ${PRODUCT_SERVICE_KEYCLOAK_SECRET}
+
+
 eureka:
   client:
     service-url:
