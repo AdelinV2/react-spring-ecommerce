@@ -4,6 +4,9 @@ server:
 spring:
   application:
     name: api-gateway
+  main:
+    web-application-type: reactive
+    allow-bean-definition-overriding: true
   cloud:
     gateway:
       routes:
@@ -34,12 +37,12 @@ spring:
           issuer-uri: ${OIDC_ISSUER_URI:http://localhost:8080/realms/ecommerce}
 
 keycloak:
-  auth-server-url: ${AUTH_SERVER_URL:http://localhost:8080/auth}
+  auth-server-url: ${AUTH_SERVER_URL:http://localhost:8080/realms/ecommerce}
   realm: ${KEYCLOAK_REALM:ecommerce}
-  resource: ${KEYCLOAK_CLIENT_ID:product-service}
+  resource: ${KEYCLOAK_CLIENT_ID:api-gateway}
   public-client: false
   credentials:
-    secret: ${PRODUCT_SERVICE_KEYCLOAK_SECRET}
+    secret: ${API_GATEWAY_KEYCLOAK_SECRET}
 
 eureka:
   client:
