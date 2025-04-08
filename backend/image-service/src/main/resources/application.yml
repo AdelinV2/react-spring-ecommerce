@@ -38,7 +38,7 @@ keycloak:
   resource: ${IMAGE-SERVICE-KEYCLOAK_CLIENT_ID:image-service}
   public-client: false
   credentials:
-    secret: ${REVIEW_SERVICE_KEYCLOAK_SECRET}
+    secret: ${IMAGE_SERVICE_KEYCLOAK_SECRET}
 
 
 eureka:

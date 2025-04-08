@@ -19,6 +19,7 @@ public class ImageKafkaProducer {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public void sendProductImageMessage(ProductImageDto productImageDto) {
+
         try {
             String token = getAccessToken();
             productImageDto = productImageDto.withAuthToken(token);
@@ -29,13 +30,16 @@ public class ImageKafkaProducer {
     }
 
     private String getAccessToken() {
+
         OAuth2AuthorizedClient client = authorizedClientManager.authorize(
-                OAuth2AuthorizeRequest.withClientRegistrationId("keycloak")
-                        .principal("image-service")
+                OAuth2AuthorizeRequest.withClientRegistrationId("image-service")
+                        .principal("system")
                         .build());
+
         if (client == null) {
             throw new RuntimeException("Unable to authorize client for Kafka messaging");
         }
+
         return client.getAccessToken().getTokenValue();
     }
 }
