@@ -2,10 +2,7 @@ package com.ecommerce.userservice.entity;
 
 import com.ecommerce.userservice.enums.Role;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -22,12 +19,12 @@ import java.time.LocalDateTime;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private int id;
+    @Column(name = "id", nullable = false, length = 36)
+    private String id;
 
-    @Column(name = "password")
-    @Size(min = 8, message = "Password must have at least 8 characters")
+    @Transient
+    @Min(value = 8, message = "Password must have at least 8 characters")
+    @Max(value = 20, message = "Password must have at most 20 characters")
     @Pattern.List({
             @Pattern(regexp = ".*\\d.*", message = "Password must contain at least one number"),
             @Pattern(regexp = ".*[!@#$%^&*()].*", message = "Password must contain at least one symbol")
@@ -39,7 +36,7 @@ public class User {
     @NotBlank(message = "Email is required")
     private String email;
 
-    @Column(name = "role")
+    @Transient
     private Role role;
 
     @CreationTimestamp
@@ -52,4 +49,11 @@ public class User {
 
     @Column(name = "profile_picture_url")
     private String profilePictureUrl;
+
+    @PrePersist
+    private void prePersist() {
+        if (this.id == null || this.id.isEmpty()) {
+            this.id = java.util.UUID.randomUUID().toString();
+        }
+    }
 }

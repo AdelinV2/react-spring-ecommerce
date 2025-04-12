@@ -1,9 +1,9 @@
 package com.ecommerce.userservice.enums;
 
 public enum Role {
-    ADMIN("ADMIN"),
-    CUSTOMER("CUSTOMER"),
-    SELLER("SELLER");
+    ADMIN("admin"),
+    CUSTOMER("customer"),
+    SELLER("seller");
 
     private final String role;
 

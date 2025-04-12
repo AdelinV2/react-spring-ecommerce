@@ -18,8 +18,8 @@ public class Customer {
     @Column(name = "id", nullable = false)
     private int id;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", nullable = false)
+    @OneToOne
+    @JoinColumn(name = "user_id", nullable = false, columnDefinition = "VARCHAR(36)")
     private User user;
 
     @Column(name = "first_name")

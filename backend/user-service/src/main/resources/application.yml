@@ -4,6 +4,8 @@ server:
 spring:
   application:
     name: user-service
+  main:
+    web-application-type: reactive
 
   datasource:
     url: ${USER_DB_URL}
@@ -26,6 +28,28 @@ spring:
     consumer:
       group-id: user-service
       auto-offset-reset: earliest
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${OIDC_ISSUER_URI:http://localhost:8080/realms/ecommerce}
+
+keycloak:
+  auth-server-url: ${AUTH_SERVER_URL:http://localhost:8080}/realms/${KEYCLOAK_REALM:ecommerce}
+  realm: ${KEYCLOAK_REALM:ecommerce}
+  resource: ${USER_SERVICE_KEYCLOAK_CLIENT_ID:user-service}
+  public-client: false
+  credentials:
+    secret: ${USER_SERVICE_KEYCLOAK_SECRET}
+
+keycloak-admin:
+  auth-server-url: ${AUTH_SERVER_URL:http://localhost:8080}
+  realm: ${KEYCLOAK_REALM:ecommerce}
+  resource: ${USER_SERVICE_ADMIN_KEYCLOAK_CLIENT_ID:user-service-admin}
+  public-client: false
+  credentials:
+    secret: ${USER_SERVICE_ADMIN_KEYCLOAK_SECRET}
 
 eureka:
   client:

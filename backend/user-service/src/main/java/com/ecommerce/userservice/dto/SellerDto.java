@@ -1,19 +1,22 @@
 package com.ecommerce.userservice.dto;
 
 import com.ecommerce.userservice.entity.Seller;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
 /**
  * DTO for {@link Seller}
  */
-@Value
+@Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class SellerDto implements Serializable {
-    
-    int id;
+
     UserDto user;
     String companyName;
     String address;
@@ -22,7 +25,6 @@ public class SellerDto implements Serializable {
 
     public static SellerDto fromEntity(Seller seller) {
         return SellerDto.builder()
-                .id(seller.getId())
                 .user(UserDto.fromEntity(seller.getUser()))
                 .companyName(seller.getCompanyName())
                 .address(seller.getAddress())
@@ -33,7 +35,6 @@ public class SellerDto implements Serializable {
 
     public static Seller toEntity(SellerDto sellerDto) {
         return Seller.builder()
-                .id(sellerDto.getId())
                 .user(UserDto.toEntity(sellerDto.getUser()))
                 .companyName(sellerDto.getCompanyName())
                 .address(sellerDto.getAddress())
