@@ -1,6 +1,10 @@
 package com.ecommerce.userservice.service;
 
 import com.ecommerce.userservice.entity.User;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+
+import java.util.Optional;
 
 public interface UserService {
 
@@ -30,4 +34,11 @@ public interface UserService {
      * @return user or null if not found
      */
     User getUserById(int id);
+
+    /**
+     * Get a user by email
+     * @param email
+     * @return user or null if not found
+     */
+    Optional<User> findByEmail(@Email(message = "Invalid email address") @NotBlank(message = "Email is required") String email);
 }

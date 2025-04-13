@@ -5,7 +5,6 @@ import com.ecommerce.userservice.entity.Customer;
 import com.ecommerce.userservice.entity.User;
 import com.ecommerce.userservice.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
@@ -19,7 +18,6 @@ public class CustomerServiceImpl {
 
     private final UserService userService;
     private final CustomerRepository customerRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
     private final KeycloakAdminClientService keycloakAdminClientService;
 
     @Transactional
@@ -45,8 +43,15 @@ public class CustomerServiceImpl {
     }
 
     @Transactional
-    public void deleteCustomer(Customer customer) {
-        customerRepository.delete(customer);
+    public Mono<Void> deleteCustomerAccount(int customerId) {
+        return Mono.fromCallable(() -> customerRepository.findById(customerId)
+                        .orElseThrow(() -> new RuntimeException("Customer not found")))
+                .flatMap(customer -> keycloakAdminClientService.deleteUser(customer.getUser().getId())
+                        .then(Mono.<Void>fromRunnable(() -> {
+                            customerRepository.delete(customer);
+                            userService.deleteUser(customer.getUser());
+                        })))
+                .subscribeOn(Schedulers.boundedElastic());
     }
 
     public Customer getCustomerById(int id) {
@@ -55,24 +60,31 @@ public class CustomerServiceImpl {
 
     @Transactional
     public Mono<Void> registerCustomer(CustomerDto customerDto) {
+
+        if (userService.findByEmail(customerDto.getUser().getEmail()).isPresent()) {
+            return Mono.error(new RuntimeException("User already exists"));
+        }
+
         return Mono.fromCallable(() -> {
-            User newUser = UserDto.toEntity(customerDto.getUser());
-            newUser.setRole(Role.CUSTOMER);
-            User savedUser = userService.createUser(newUser);
-            createCustomer(customerDto, savedUser);
-            return new Object[]{savedUser, customerDto.getUser().getPassword()};
-        })
-        .subscribeOn(Schedulers.boundedElastic())
-        .flatMap(tuple -> {
-            User savedUser = (User) tuple[0];
-            String plainPassword = (String) tuple[1];
-            return keycloakAdminClientService.registerUserInKeycloak(
-                    savedUser.getEmail(), savedUser.getEmail(), plainPassword, Role.CUSTOMER
-            ).flatMap(keycloakId -> {
-                savedUser.setId(keycloakId);
-                userService.updateUser(savedUser);
-                return Mono.empty();
-            });
-        });
+                    User newUser = UserDto.toEntity(customerDto.getUser());
+                    newUser.setRole(Role.CUSTOMER);
+                    return new Object[]{newUser, customerDto.getUser().getPassword()};
+                })
+                .subscribeOn(Schedulers.boundedElastic())
+                .flatMap(tuple -> {
+                    User newUser = (User) tuple[0];
+                    String plainPassword = (String) tuple[1];
+                    return keycloakAdminClientService.registerUserInKeycloak(
+                                    newUser.getEmail(), newUser.getEmail(), plainPassword, Role.CUSTOMER
+                            )
+                            .publishOn(Schedulers.boundedElastic())
+                            .map(keycloakId -> {
+                                newUser.setId(keycloakId);
+                                User savedUser = userService.createUser(newUser);
+                                createCustomer(customerDto, savedUser);
+                                return savedUser;
+                            });
+                })
+                .then();
     }
 }

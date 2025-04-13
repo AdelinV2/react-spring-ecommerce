@@ -7,7 +7,6 @@ import com.ecommerce.userservice.entity.User;
 import com.ecommerce.userservice.enums.Role;
 import com.ecommerce.userservice.repository.SellerRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
@@ -19,7 +18,6 @@ public class SellerServiceImpl {
 
     private final SellerRepository sellerRepository;
     private final UserService userService;
-    private final BCryptPasswordEncoder passwordEncoder;
     private final KeycloakAdminClientService keycloakAdminClientService;
 
     @Transactional
@@ -45,8 +43,16 @@ public class SellerServiceImpl {
     }
 
     @Transactional
-    public void deleteSeller(Seller seller) {
-        sellerRepository.delete(seller);
+    public Mono<Void> deleteSeller(int sellerId) {
+
+        return Mono.fromCallable(() -> sellerRepository.findById(sellerId)
+                        .orElseThrow(() -> new RuntimeException("Seller not found")))
+                .flatMap(seller -> keycloakAdminClientService.deleteUser(seller.getUser().getId())
+                        .then(Mono.<Void>fromRunnable(() -> {
+                            sellerRepository.delete(seller);
+                            userService.deleteUser(seller.getUser());
+                        })))
+                .subscribeOn(Schedulers.boundedElastic());
     }
 
     public Seller getSellerById(int id) {
@@ -55,6 +61,11 @@ public class SellerServiceImpl {
 
     @Transactional
     public Mono<Void> registerSeller(SellerDto sellerDto) {
+
+        if (userService.findByEmail(sellerDto.getUser().getEmail()).isPresent()) {
+            return Mono.error(new RuntimeException("User already exists"));
+        }
+
         return Mono.fromCallable(() -> {
                     User newUser = UserDto.toEntity(sellerDto.getUser());
                     newUser.setRole(Role.SELLER);
@@ -66,7 +77,7 @@ public class SellerServiceImpl {
                     String plainPassword = (String) tuple[1];
                     return keycloakAdminClientService.registerUserInKeycloak(
                             newUser.getEmail(), newUser.getEmail(), plainPassword, Role.SELLER
-                    ).map(keycloakId -> {
+                    ).publishOn(Schedulers.boundedElastic()).map(keycloakId -> {
                         newUser.setId(keycloakId);
                         User savedUser = userService.createUser(newUser);
                         createSeller(sellerDto, savedUser);
@@ -75,4 +86,6 @@ public class SellerServiceImpl {
                 })
                 .then();
     }
+
+
 }

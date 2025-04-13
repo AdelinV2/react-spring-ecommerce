@@ -19,27 +19,22 @@ import java.util.Map;
 public class KeycloakAdminClientService {
 
     private final WebClient webClient;
-    private final String authServerUrl;
     private final String realm;
     private final String clientId;
     private final String clientSecret;
-    private final String userServiceClientId;
-    private final BCryptPasswordEncoder passwordEncoder; // new field
+    private final BCryptPasswordEncoder passwordEncoder;
 
     public KeycloakAdminClientService(WebClient.Builder webClientBuilder,
                                       @Value("${AUTH_SERVER_URL:http://localhost:8080}") String authServerUrl,
                                       @Value("${KEYCLOAK_REALM:ecommerce}") String realm,
                                       @Value("${keycloak-admin.resource:user-service-admin}") String clientId,
                                       @Value("${USER_SERVICE_ADMIN_KEYCLOAK_SECRET}") String clientSecret,
-                                      @Value("${USER_SERVICE_KEYCLOAK_CLIENT_ID:user-service}") String userServiceClientId,
                                       BCryptPasswordEncoder passwordEncoder) {
         this.webClient = webClientBuilder.baseUrl(authServerUrl).build();
-        this.authServerUrl = authServerUrl;
         this.realm = realm;
         this.clientId = clientId;
         this.clientSecret = clientSecret;
-        this.userServiceClientId = userServiceClientId;
-        this.passwordEncoder = passwordEncoder; // assign encoder
+        this.passwordEncoder = passwordEncoder;
     }
 
     private String getTokenEndpoint() {
@@ -81,31 +76,31 @@ public class KeycloakAdminClientService {
         );
 
         return getAdminAccessToken().flatMap(accessToken ->
-            webClient.post()
-                .uri(uriBuilder -> uriBuilder
-                        .path("/admin/realms/{realm}/users")
-                        .build(realm))
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .body(BodyInserters.fromValue(userRepresentation))
-                .exchangeToMono(response -> {
-                    if (response.statusCode().is2xxSuccessful()) {
-                        String location = response.headers().asHttpHeaders()
-                                .getFirst(HttpHeaders.LOCATION);
-                        if (location != null) {
-                            String userId = location.substring(location.lastIndexOf("/") + 1);
-                            return Mono.just(userId);
-                        } else {
-                            return Mono.error(new RuntimeException("Missing Location header in response"));
-                        }
-                    } else {
-                        return response.bodyToMono(String.class)
-                                .flatMap(error -> {
-                                    System.out.println("User creation error: " + error);
-                                    return Mono.error(new RuntimeException("Error creating user: " + error));
-                                });
-                    }
-                })
+                webClient.post()
+                        .uri(uriBuilder -> uriBuilder
+                                .path("/admin/realms/{realm}/users")
+                                .build(realm))
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+                        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                        .body(BodyInserters.fromValue(userRepresentation))
+                        .exchangeToMono(response -> {
+                            if (response.statusCode().is2xxSuccessful()) {
+                                String location = response.headers().asHttpHeaders()
+                                        .getFirst(HttpHeaders.LOCATION);
+                                if (location != null) {
+                                    String userId = location.substring(location.lastIndexOf("/") + 1);
+                                    return Mono.just(userId);
+                                } else {
+                                    return Mono.error(new RuntimeException("Missing Location header in response"));
+                                }
+                            } else {
+                                return response.bodyToMono(String.class)
+                                        .flatMap(error -> {
+                                            System.out.println("User creation error: " + error);
+                                            return Mono.error(new RuntimeException("Error creating user: " + error));
+                                        });
+                            }
+                        })
         );
     }
 
@@ -170,5 +165,24 @@ public class KeycloakAdminClientService {
         String encodedPassword = passwordEncoder.encode(password);
         return createUser(username, email, encodedPassword)
                 .flatMap(userId -> assignRoleToUser(userId, role).thenReturn(userId));
+    }
+
+    public Mono<Void> deleteUser(String userId) {
+        return getAdminAccessToken()
+                .flatMap(accessToken ->
+                        webClient.delete()
+                                .uri(uriBuilder -> uriBuilder
+                                        .path("/admin/realms/{realm}/users/{userId}")
+                                        .build(realm, userId))
+                                .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+                                .retrieve()
+                                .onStatus(status -> status.isError(),
+                                        response -> response.bodyToMono(String.class)
+                                                .flatMap(error -> {
+                                                    System.out.println("Keycloak deletion error: " + error);
+                                                    return Mono.error(new RuntimeException("Error deleting keycloak user: " + error));
+                                                }))
+                                .bodyToMono(Void.class)
+                );
     }
 }
