@@ -21,13 +21,13 @@ public class SellerServiceImpl {
     private final KeycloakAdminClientService keycloakAdminClientService;
 
     @Transactional
-    public void createSeller(SellerDto seller, User user) {
+    public Seller createSeller(SellerDto seller, User user) {
 
         Seller newSeller = SellerDto.toEntity(seller);
         newSeller.setUser(user);
 
         try {
-            sellerRepository.save(newSeller);
+            return sellerRepository.save(newSeller);
         } catch (Exception e) {
             throw new RuntimeException("The email or phone number is already in use", e);
         }
@@ -60,8 +60,7 @@ public class SellerServiceImpl {
     }
 
     @Transactional
-    public Mono<Void> registerSeller(SellerDto sellerDto) {
-
+    public Mono<Seller> registerSeller(SellerDto sellerDto) {
         if (userService.findByEmail(sellerDto.getUser().getEmail()).isPresent()) {
             return Mono.error(new RuntimeException("User already exists"));
         }
@@ -76,16 +75,15 @@ public class SellerServiceImpl {
                     User newUser = (User) tuple[0];
                     String plainPassword = (String) tuple[1];
                     return keycloakAdminClientService.registerUserInKeycloak(
-                            newUser.getEmail(), newUser.getEmail(), plainPassword, Role.SELLER
-                    ).publishOn(Schedulers.boundedElastic()).map(keycloakId -> {
-                        newUser.setId(keycloakId);
-                        User savedUser = userService.createUser(newUser);
-                        createSeller(sellerDto, savedUser);
-                        return savedUser;
-                    });
-                })
-                .then();
+                                    newUser.getEmail(), newUser.getEmail(), plainPassword, Role.SELLER
+                            )
+                            .publishOn(Schedulers.boundedElastic())
+                            .map(keycloakId -> {
+                                newUser.setId(keycloakId);
+                                User savedUser = userService.createUser(newUser);
+                                return createSeller(sellerDto, savedUser);
+                            });
+                });
     }
-
 
 }

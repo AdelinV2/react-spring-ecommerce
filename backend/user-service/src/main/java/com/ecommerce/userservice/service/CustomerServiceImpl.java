@@ -59,12 +59,10 @@ public class CustomerServiceImpl {
     }
 
     @Transactional
-    public Mono<Void> registerCustomer(CustomerDto customerDto) {
-
+    public Mono<Customer> registerCustomer(CustomerDto customerDto) {
         if (userService.findByEmail(customerDto.getUser().getEmail()).isPresent()) {
             return Mono.error(new RuntimeException("User already exists"));
         }
-
         return Mono.fromCallable(() -> {
                     User newUser = UserDto.toEntity(customerDto.getUser());
                     newUser.setRole(Role.CUSTOMER);
@@ -75,16 +73,13 @@ public class CustomerServiceImpl {
                     User newUser = (User) tuple[0];
                     String plainPassword = (String) tuple[1];
                     return keycloakAdminClientService.registerUserInKeycloak(
-                                    newUser.getEmail(), newUser.getEmail(), plainPassword, Role.CUSTOMER
-                            )
+                                    newUser.getEmail(), newUser.getEmail(), plainPassword, Role.CUSTOMER)
                             .publishOn(Schedulers.boundedElastic())
                             .map(keycloakId -> {
                                 newUser.setId(keycloakId);
                                 User savedUser = userService.createUser(newUser);
-                                createCustomer(customerDto, savedUser);
-                                return savedUser;
+                                return createCustomer(customerDto, savedUser);
                             });
-                })
-                .then();
+                });
     }
 }

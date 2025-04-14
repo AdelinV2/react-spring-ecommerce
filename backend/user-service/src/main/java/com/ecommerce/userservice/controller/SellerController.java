@@ -1,6 +1,7 @@
 package com.ecommerce.userservice.controller;
 
 import com.ecommerce.userservice.dto.SellerDto;
+import com.ecommerce.userservice.entity.Seller;
 import com.ecommerce.userservice.service.SellerServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,12 +17,10 @@ public class SellerController {
     private final SellerServiceImpl sellerService;
 
     @PostMapping("/create")
-    public Mono<ResponseEntity<String>> createSeller(@RequestBody SellerDto sellerDto) {
-
+    public Mono<ResponseEntity<Seller>> createSeller(@RequestBody SellerDto sellerDto) {
         return sellerService.registerSeller(sellerDto)
-                .thenReturn(ResponseEntity.status(HttpStatus.CREATED).body("Seller created successfully"))
-                .onErrorResume(e -> Mono.just(ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body("Error creating seller: " + e.getMessage())));
+                .map(seller -> ResponseEntity.status(HttpStatus.CREATED).body(seller))
+                .onErrorResume(e -> Mono.just(ResponseEntity.status(HttpStatus.BAD_REQUEST).build()));
     }
 
     @DeleteMapping("/delete/{sellerId}")
