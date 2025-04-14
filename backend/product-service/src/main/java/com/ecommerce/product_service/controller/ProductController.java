@@ -48,9 +48,9 @@ public class ProductController {
     @PostMapping
     public ResponseEntity<Product> createProduct(@RequestBody ProductRequestDto product) throws IOException {
 
-        productService.saveProduct(product);
+        Product savedProduct = productService.saveProduct(product);
 
-        return ResponseEntity.status(HttpStatus.CREATED).build(); 
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedProduct);
     }
 
     @PutMapping

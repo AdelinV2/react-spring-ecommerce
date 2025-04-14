@@ -26,7 +26,7 @@ public class ProductServiceImpl implements ProductService {
     private final ReviewClient reviewClient;
 
     @Override
-    public void saveProduct(ProductRequestDto product) throws IOException {
+    public Product saveProduct(ProductRequestDto product) throws IOException {
 
         Product savedProduct = productRepository.saveAndFlush(ProductRequestDto.toEntity(product));
 
@@ -49,6 +49,8 @@ public class ProductServiceImpl implements ProductService {
             newSpecification.setProduct(savedProduct);
             specificationService.saveSpecification(newSpecification);
         }
+
+        return savedProduct;
     }
 
     @Override

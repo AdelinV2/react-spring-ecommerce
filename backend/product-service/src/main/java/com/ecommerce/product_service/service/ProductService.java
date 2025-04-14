@@ -17,8 +17,9 @@ public interface ProductService {
      * Save product.
      *
      * @param product the product to save
+     * @return the saved product
      */
-    void saveProduct(ProductRequestDto product) throws IOException;
+    Product saveProduct(ProductRequestDto product) throws IOException;
 
     /**
      * Delete a product.
