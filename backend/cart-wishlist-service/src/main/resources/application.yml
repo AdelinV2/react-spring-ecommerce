@@ -1,0 +1,57 @@
+server:
+  port: ${CART_WISHLIST_SERVICE_PORT:80}
+
+spring:
+  application:
+    name: cart-wishlist-service
+
+  datasource:
+    url: ${CART_WISHLIST_DB_URL}
+    username: ${CART_WISHLIST_DB_USERNAME}
+    password: ${CART_WISHLIST_DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+    open-in-view: false
+
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    producer:
+      retries: 3
+      acks: all
+    consumer:
+      group-id: cart-wishlist-service
+      auto-offset-reset: earliest
+    properties:
+      security.protocol: SASL_SSL
+      sasl.mechanism: PLAIN
+      sasl.jaas.config: "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"$ConnectionString\" password=\"${KAFKA_PASSWORD}\";"
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${OIDC_ISSUER_URI:http://localhost:8080/realms/ecommerce}
+
+keycloak:
+  auth-server-url: ${AUTH_SERVER_URL:http://localhost:8080/realms/ecommerce}
+  realm: ${KEYCLOAK_REALM:ecommerce}
+  resource: ${CART_WISHLIST_SERVICE_KEYCLOAK_CLIENT_ID:cart-wishlist-service}
+  public-client: false
+  credentials:
+    secret: ${CART_WISHLIST_SERVICE_KEYCLOAK_SECRET}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVER_URL:http://localhost:8761/eureka/}
+    register-with-eureka: true
+    fetch-registry: true
+
+  instance:
+    prefer-ip-address: true
