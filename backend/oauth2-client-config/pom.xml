@@ -7,6 +7,7 @@
         <groupId>com.ecommerce</groupId>
         <artifactId>ecommerce-backend</artifactId>
         <version>1.0.0</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>oauth2-client-config</artifactId>
