@@ -51,6 +51,11 @@
                 <artifactId>spring-kafka</artifactId>
                 <version>3.3.3</version>
             </dependency>
+            <dependency>
+                <groupId>com.ecommerce</groupId>
+                <artifactId>oauth2-client-config</artifactId>
+                <version>1.0.0</version>
+            </dependency>
 
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
@@ -105,7 +110,7 @@
                 <version>3.4.3</version>
                 <configuration>
                     <from>
-                        <image>eclipse-temurin:17.0.4.1_1-jre</image>
+                        <image>openjdk:21-jdk</image>
                     </from>
                     <to>
                         <image>adelinv2/react-spring-ecommerce.${project.artifactId}</image>
