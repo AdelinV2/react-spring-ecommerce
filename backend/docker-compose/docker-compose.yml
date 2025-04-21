@@ -1,23 +1,43 @@
-version: "3.8"
-
 services:
 
-#  kafka:
-#    image: wurstmeister/kafka:latest
-#    environment:
-#      KAFKA_ADVERTISED_LISTENERS: INSIDE://${KAFKA_BOOTSTRAP_SERVERS}
-#      KAFKA_LISTENER_SECURITY_PROTOCOL: PLAINTEXT
-#      KAFKA_LISTENER_NAME_INSIDE: INSIDE
-#      KAFKA_LISTENERS: INSIDE://0.0.0.0:9093
-#      KAFKA_LISTENER_PORT: 9093
-#      KAFKA_LISTENER_NAME: INSIDE
-#      KAFKA_LISTENER_INTERNAL_PORT: 9093
-#      KAFKA_PASSWORD: ${KAFKA_PASSWORD}
-#    ports:
-#      - "9093:9093"
-#    networks:
-#      - ecommerce_network
-#    restart: always
+  zookeeper:
+    image: wurstmeister/zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+    networks:
+      - ecommerce_network
+    restart: always
+
+  kafka:
+    image: wurstmeister/kafka:latest
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka:9092
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    ports:
+      - "9092:9092"
+    networks:
+      - ecommerce_network
+    restart: always
+    depends_on:
+      - zookeeper
+
+  mysql:
+      image: mysql:8.0
+      container_name: mysql-multi-db
+      environment:
+        MYSQL_ROOT_PASSWORD: root_password
+      ports:
+        - "3306:3306"
+      volumes:
+        - mysql-data:/var/lib/mysql
+        - ./init-scripts:/docker-entrypoint-initdb.d
+      networks:
+        - ecommerce_network
+      restart: always
 
   keycloak:
     image: quay.io/keycloak/keycloak:latest
@@ -82,6 +102,7 @@ services:
     depends_on:
       - service-registry
       - keycloak
+      - mysql
 #      - kafka
     networks:
       - ecommerce_network
@@ -104,9 +125,10 @@ services:
       USER_SERVICE_ADMIN_KEYCLOAK_SECRET: ${USER_SERVICE_ADMIN_KEYCLOAK_SECRET}
       USER_SERVICE_KEYCLOAK_CLIENT_ID: ${USER_SERVICE_KEYCLOAK_CLIENT_ID}
     depends_on:
-#      - kafka
+      - kafka
       - service-registry
       - keycloak
+      - mysql
     networks:
       - ecommerce_network
     restart: always
@@ -125,7 +147,8 @@ services:
     depends_on:
        - service-registry
        - keycloak
-#      - kafka
+       - mysql
+       - kafka
     networks:
       - ecommerce_network
     restart: always
@@ -144,10 +167,14 @@ services:
     depends_on:
       - service-registry
       - keycloak
-#      - kafka
+      - mysql
+      - kafka
     networks:
       - ecommerce_network
     restart: always
+
+volumes:
+  mysql-data:
 
 networks:
   ecommerce_network:

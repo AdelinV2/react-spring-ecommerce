@@ -17,9 +17,7 @@ spring:
       group-id: image-service
       auto-offset-reset: earliest
     properties:
-      security.protocol: SASL_SSL
-      sasl.mechanism: PLAIN
-      sasl.jaas.config: "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"$ConnectionString\" password=\"${KAFKA_PASSWORD}\";"
+      security.protocol: PLAINTEXT
 
   servlet:
     multipart:
