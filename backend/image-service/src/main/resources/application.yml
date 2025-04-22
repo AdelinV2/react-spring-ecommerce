@@ -49,6 +49,7 @@ eureka:
   instance:
     prefer-ip-address: true
 
-azure:
-  blob:
-    connection-string: ${AZURE_STORAGE_CONNECTION_STRING}
+imagekit:
+  public-key: ${IMAGEKIT_PUBLIC_KEY}
+  private-key: ${IMAGEKIT_PRIVATE_KEY}
+  url-endpoint: ${IMAGEKIT_URL_ENDPOINT}
