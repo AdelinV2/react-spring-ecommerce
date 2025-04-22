@@ -10,14 +10,14 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>oauth2-client-config</module>
+        <module>service-registry</module>
         <module>api-gateway</module>
         <module>user-service</module>
         <module>product-service</module>
-        <module>service-registry</module>
         <module>image-service</module>
         <module>review-service</module>
         <module>cart-wishlist-service</module>
-        <module>oauth2-client-config</module>
         <!--        <module>order-payment-service</module>-->
         <!--        <module>customer-service</module>-->
         <!--        <module>giftcard-service</module>-->
