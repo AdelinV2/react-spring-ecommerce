@@ -10,9 +10,9 @@ public class ImageKitConfig {
 
     @Bean
     public ImageKit imageKit(
-            @Value("${imagekit.publicKey}") String publicKey,
-            @Value("${imagekit.privateKey}") String privateKey,
-            @Value("${imagekit.urlEndpoint}") String urlEndpoint) {
+            @Value("${imagekit.public-key}") String publicKey,
+            @Value("${imagekit.private-key}") String privateKey,
+            @Value("${imagekit.url-endpoint}") String urlEndpoint) {
 
         ImageKit imageKit = ImageKit.getInstance();
         imageKit.setConfig(new Configuration(publicKey, privateKey, urlEndpoint));
