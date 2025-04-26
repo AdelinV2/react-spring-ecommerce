@@ -35,9 +35,20 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: ${OIDC_ISSUER_URI:http://localhost:8080/realms/ecommerce}
+      client:
+        registration:
+          product-service:
+            client-id: ${PRODUCT-SERVICE-KEYCLOAK_CLIENT_ID:product-service}
+            client-secret: ${PRODUCT_SERVICE_KEYCLOAK_SECRET}
+            authorization-grant-type: client_credentials
+            provider: keycloak
+
+        provider:
+          keycloak:
+            token-uri: ${AUTH_SERVER_URL:http://localhost:8080}/realms/${KEYCLOAK_REALM:ecommerce}/protocol/openid-connect/token
 
 keycloak:
-  auth-server-url: ${AUTH_SERVER_URL:http://localhost:8080/realms/ecommerce}
+  auth-server-url: ${AUTH_SERVER_URL:http://localhost:8080}
   realm: ${KEYCLOAK_REALM:ecommerce}
   resource: ${PRODUCT-SERVICE-KEYCLOAK_CLIENT_ID:product-service}
   public-client: false

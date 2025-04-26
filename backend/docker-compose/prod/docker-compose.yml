@@ -20,6 +20,7 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
     ports:
       - "9092:9092"
+      - "9093:9093"
     networks:
       - ecommerce_network
     restart: always

@@ -1,0 +1,64 @@
+services:
+
+  zookeeper:
+    image: wurstmeister/zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+    networks:
+      - ecommerce_network
+    restart: always
+
+  kafka:
+    image: wurstmeister/kafka:latest
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka:9092,PLAINTEXT://localhost:9093
+      KAFKA_LISTENERS: INSIDE://0.0.0.0:9092,PLAINTEXT://0.0.0.0:9093
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    ports:
+      - "9092:9092"
+      - "9093:9093"
+    networks:
+      - ecommerce_network
+    restart: always
+    depends_on:
+      - zookeeper
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-multi-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+    ports:
+      - "3306:3306"
+    volumes:
+    - mysql-data:/var/lib/mysql
+    - ./init-scripts:/docker-entrypoint-initdb.d
+    networks:
+      - ecommerce_network
+    restart: always
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KEYCLOAK_FRONTEND_URL: http://localhost:8080/
+    ports:
+      - "8080:8080"
+    command: [ "start-dev", "--import-realm" ]
+    volumes:
+      - ./keycloak-export/realm-export.json:/opt/keycloak/data/import/realm-export.json:ro
+    networks:
+      - ecommerce_network
+    restart: always
+
+volumes:
+  mysql-data:
+
+networks:
+  ecommerce_network:
+    driver: bridge

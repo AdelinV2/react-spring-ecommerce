@@ -25,12 +25,14 @@ public class OAuth2ClientConfig {
             @Value("${keycloak.resource}") String clientId,
             @Value("${keycloak.credentials.secret}") String clientSecret) {
 
+        String tokenUri = authServerUrl + "/realms/" + realm + "/protocol/openid-connect/token";
+
         ClientRegistration registration = ClientRegistration.withRegistrationId(clientId)
                 .clientId(clientId)
                 .clientSecret(clientSecret)
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
-                .tokenUri(authServerUrl + "/protocol/openid-connect/token")
+                .tokenUri(tokenUri)
                 .build();
 
         return new InMemoryClientRegistrationRepository(registration);
