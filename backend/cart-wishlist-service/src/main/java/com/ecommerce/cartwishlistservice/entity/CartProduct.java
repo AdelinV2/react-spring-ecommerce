@@ -1,10 +1,7 @@
 package com.ecommerce.cartwishlistservice.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.util.Date;
@@ -13,6 +10,7 @@ import java.util.Date;
 @Table(name = "cart_product")
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class CartProduct {
