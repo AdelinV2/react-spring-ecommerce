@@ -10,6 +10,7 @@ import java.util.Date;
 @Table(name = "wishlist_product")
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class WishlistProduct {

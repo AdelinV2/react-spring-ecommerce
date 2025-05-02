@@ -8,7 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/cart")
@@ -31,5 +33,20 @@ public class CartProductController {
         List<CartProduct> cartProducts = cartProductService.getAllCartProductsByUserId(userId);
 
         return ResponseEntity.ok(cartProducts);
+    }
+
+    @DeleteMapping("/{cartProductId}")
+    public ResponseEntity<Void> deleteCartProductsByProductId(@PathVariable("cartProductId") int id,
+                                                              Principal principal) {
+
+        CartProduct cartProduct = cartProductService.findById(id);
+
+        if (!cartProduct.getUserId().equals(principal.getName())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        cartProductService.deleteCartProductById(id);
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 }

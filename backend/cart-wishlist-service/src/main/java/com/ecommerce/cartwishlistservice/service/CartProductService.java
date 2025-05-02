@@ -29,4 +29,17 @@ public class CartProductService {
 
         cartProductRepository.deleteAllByProductId(productId);
     }
+
+    public void deleteCartProductById(int cartProductId) {
+        cartProductRepository.deleteById(cartProductId);
+    }
+
+    public void deleteAllCartProductsByUserId(String userId) {
+
+        cartProductRepository.deleteAllByUserId(userId);
+    }
+
+    public CartProduct findById(int id) {
+        return cartProductRepository.findById(id).orElse(null);
+    }
 }
