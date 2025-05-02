@@ -24,4 +24,9 @@ public class CartProductService {
 
         return cartProductRepository.findByUserId(userId);
     }
+
+    public void deleteCartProductsByProductId(int productId) {
+
+        cartProductRepository.deleteAllByProductId(productId);
+    }
 }

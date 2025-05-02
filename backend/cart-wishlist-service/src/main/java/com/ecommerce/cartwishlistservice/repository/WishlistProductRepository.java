@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface WishlistProductRepository extends JpaRepository<WishlistProduct, Integer> {
 
+    void deleteAllByProductId(int productId);
 }
