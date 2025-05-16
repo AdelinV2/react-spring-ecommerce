@@ -18,7 +18,7 @@
         <module>image-service</module>
         <module>review-service</module>
         <module>cart-wishlist-service</module>
-        <!--        <module>order-payment-service</module>-->
+        <module>order-payment-service</module>
         <!--        <module>customer-service</module>-->
         <!--        <module>giftcard-service</module>-->
         <!--        <module>notification-service</module>-->
